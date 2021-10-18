@@ -25,7 +25,7 @@ public class GameScene extends GeneralScene{
     private double time = 0;
 
     public GameScene(){
-        player = new Player("SpaceShip.png",50,73,false,true);
+        player = new Player("SpaceShip.png",50,73,true,true);
         initEnemies();
         bullets = new ArrayList<>();
     }
@@ -33,7 +33,7 @@ public class GameScene extends GeneralScene{
     public void initEnemies(){
         this.enemies = new ArrayList<>();
         for (int i = 1; i <= 5; i++){
-            enemies.add(new Enemy("SpaceShip.png",50,73,false,false));
+            enemies.add(new Enemy("Enemies/Spaceship-Drakir1.png",50,73,true,true));
         }
 
         for (int i = 0; i < 5; i++) {

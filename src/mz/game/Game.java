@@ -15,8 +15,8 @@ public class Game extends Application {
     public void start(Stage primaryStage) throws Exception {
         root = primaryStage;
         scenes[0] = new GameScene();
-
         setScene(0);
+
         root.setTitle("SPACE");
         root.show();
 
