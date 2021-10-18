@@ -18,8 +18,7 @@ public class Player extends GeneralSprite{
         setY(getY()+dy);
     }
 
-    @Override
-    public void draw(GraphicsContext gc) {
-        gc.drawImage(this,getX(),getY());
+    public void shoot(){
+
     }
 }
