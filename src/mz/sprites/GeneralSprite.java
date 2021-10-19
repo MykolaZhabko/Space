@@ -6,9 +6,14 @@ import javafx.scene.image.Image;
 public abstract class GeneralSprite extends Image {
     private int x;
     private int y;
+    private boolean isAlive = true;
 
     public GeneralSprite(String url, double requestedWidth, double requestedHeight, boolean preserveRatio, boolean smooth) {
         super(url, requestedWidth, requestedHeight, preserveRatio, smooth);
+    }
+
+    public GeneralSprite(String url) {
+        super(url);
     }
 
 
@@ -28,5 +33,15 @@ public abstract class GeneralSprite extends Image {
         this.y = y;
     }
 
-    public abstract void draw(GraphicsContext gc);
+
+    public boolean isAlive() {
+        return isAlive;
+    }
+
+    public void setAlive(boolean alive) {
+        isAlive = alive;
+    }
+    public void draw(GraphicsContext gc){
+        gc.drawImage(this,getX(),getY());
+    }
 }
