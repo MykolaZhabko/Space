@@ -14,6 +14,8 @@ public class Player extends GeneralSprite{
     public Player(String url, double requestedWidth, double requestedHeight, boolean preserveRatio, boolean smooth) {
         super(url, requestedWidth, requestedHeight, preserveRatio, smooth);
         laser = new Image("weapon/laserGreen1.png");
+        setX(GameScene.GAME_WIDTH/2 - (int)this.getWidth()/2);
+        setY(GameScene.GAME_HEIGHT - (int)this.getHeight()*2);
     }
 
     public void move(int dx, int dy){

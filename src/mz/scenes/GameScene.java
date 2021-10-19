@@ -7,6 +7,7 @@ import javafx.scene.input.KeyCode;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
+import mz.backgrounds.Level1;
 import mz.game.Game;
 import mz.sprites.Bullet;
 import mz.sprites.Enemy;
@@ -19,13 +20,15 @@ import java.util.ListIterator;
 
 public class GameScene extends GeneralScene{
     private Player player;
-    private ArrayList<GeneralSprite> enemies;
+    private Level1 bgL1;
+    private ArrayList<Enemy> enemies;
     private ArrayList<Bullet> bullets;
 
     private double time = 0;
 
     public GameScene(){
         player = new Player("SpaceShip.png",50,73,true,true);
+        bgL1 = new Level1("Space_bg.png",0,0);
         initEnemies();
         bullets = new ArrayList<>();
     }
@@ -51,13 +54,12 @@ public class GameScene extends GeneralScene{
             @Override
             public void handle(long now) {
                 time += 0.016;
-                gc.setFill(Color.BLACK);
-                gc.fillRect(0,0,GAME_WIDTH, GAME_HEIGHT);
-
+                bgL1.draw(gc);
                 showDevInfo();
                 player.draw(gc);
-                drawEnemyes(gc);
+                drawEnemies(gc);
                 drawBullets(gc);
+
                 keyPressHandler(this);
                 collisionDetect();
             }
@@ -101,15 +103,17 @@ public class GameScene extends GeneralScene{
         }
     }
 
-    private void drawEnemyes(GraphicsContext gc) {
-        for(GeneralSprite enemy: enemies){
+    private void drawEnemies(GraphicsContext gc) {
+        for(Enemy enemy: enemies){
             enemy.draw(gc);
+            enemy.moveDown();
         }
 
-        ListIterator<GeneralSprite> aliveEnemies = enemies.listIterator();
+        ListIterator<Enemy> aliveEnemies = enemies.listIterator();
         while (aliveEnemies.hasNext()){
             if (!aliveEnemies.next().isAlive()){
                 aliveEnemies.remove();
+
             }
         }
     }
@@ -150,7 +154,6 @@ public class GameScene extends GeneralScene{
                 bullets.add(bullet);
                 time = 0;
             }
-            //bullet.draw(gc);
         }
         if (activeKeys.contains(KeyCode.ESCAPE)){
             timer.stop();
