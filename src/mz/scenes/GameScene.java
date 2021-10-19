@@ -21,27 +21,40 @@ import java.util.ListIterator;
 public class GameScene extends GeneralScene{
     private Player player;
     private Level1 bgL1;
+    private ArrayList<String> enemyArmy;
     private ArrayList<Enemy> enemies;
     private ArrayList<Bullet> bullets;
 
     private double time = 0;
+    private double enemyTime = 0;
 
     public GameScene(){
         player = new Player("SpaceShip.png",50,73,true,true);
-        bgL1 = new Level1("Space_bg.png",0,0);
-        initEnemies();
+        bgL1 = new Level1("Space_bg.png");
+
+        enemyArmy = new ArrayList<>();
+        enemies = new ArrayList<>();
         bullets = new ArrayList<>();
+
+        enemyArmy.add("Enemies/Spaceship-Drakir1.png");
+        enemyArmy.add("Enemies/Spaceship-Drakir2.png");
+        enemyArmy.add("Enemies/Spaceship-Drakir3.png");
+        enemyArmy.add("Enemies/Spaceship-Drakir4.png");
+        enemyArmy.add("Enemies/Spaceship-Drakir5.png");
+        enemyArmy.add("Enemies/Spaceship-Drakir6.png");
+        enemyArmy.add("Enemies/Spaceship-Drakir7.png");
     }
 
-    public void initEnemies(){
-        this.enemies = new ArrayList<>();
-        for (int i = 1; i <= 5; i++){
-            enemies.add(new Enemy("Enemies/Spaceship-Drakir1.png",50,73,true,true));
-        }
+    public void generateEnemies(){
+        enemyTime += 0.02;
+        if (enemyTime > 1) {
+            int enemyRandom = (int) (Math.round(Math.random() * 6));
+            Enemy newEnemy = new Enemy(enemyArmy.get(enemyRandom));
+            newEnemy.setY(0-(int)newEnemy.getHeight());
+            newEnemy.setX((int) Math.round(Math.random()*(GameScene.GAME_WIDTH - (int)newEnemy.getWidth())));
+            enemies.add(newEnemy);
 
-        for (int i = 0; i < 5; i++) {
-            enemies.get(i).setX(i*100);
-            enemies.get(i).setY(100);
+            enemyTime = 0;
         }
     }
 
@@ -57,6 +70,7 @@ public class GameScene extends GeneralScene{
                 bgL1.draw(gc);
                 showDevInfo();
                 player.draw(gc);
+                generateEnemies();
                 drawEnemies(gc);
                 drawBullets(gc);
 
@@ -104,6 +118,7 @@ public class GameScene extends GeneralScene{
     }
 
     private void drawEnemies(GraphicsContext gc) {
+        if (enemies.size() == 0) return;
         for(Enemy enemy: enemies){
             enemy.draw(gc);
             enemy.moveDown();

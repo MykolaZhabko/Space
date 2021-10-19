@@ -9,6 +9,9 @@ public class Enemy extends GeneralSprite{
         super(url, requestedWidth, requestedHeight, preserveRatio, smooth);
     }
 
+    public Enemy(String url){
+        super(url);
+    }
     public void moveDown(){
         setY(getY() + 1);
     }

@@ -7,12 +7,11 @@ import mz.scenes.GameScene;
 public class GeneralBackground extends Image {
     private double t;
     private int x;
-    private int y;
+    private double y;
     private int y2;
 
-    public GeneralBackground(String url, int x, int y) {
+    public GeneralBackground(String url) {
         super(url);
-        setT(0);
         setX(0);
         setY(0);
     }
@@ -33,11 +32,11 @@ public class GeneralBackground extends Image {
         this.x = x;
     }
 
-    public int getY() {
+    public double getY() {
         return y;
     }
 
-    public void setY(int y) {
+    public void setY(double y) {
         this.y = y;
     }
 
@@ -55,7 +54,7 @@ public class GeneralBackground extends Image {
         gc.drawImage(this,x,y, GameScene.GAME_WIDTH,GameScene.GAME_HEIGHT);
         gc.drawImage(this,x,y - GameScene.GAME_HEIGHT,GameScene.GAME_WIDTH, GameScene.GAME_HEIGHT);
         //if (getT() > 0.3){
-            setY(getY() + 2);
+            setY(getY() + 0.3);
             if (getY() > GameScene.GAME_HEIGHT) setY(0);
 
 
