@@ -1,6 +1,7 @@
 package mz.sprites;
 
 import javafx.scene.canvas.GraphicsContext;
+import mz.scenes.GameScene;
 
 public class Bullet extends GeneralSprite{
 
@@ -13,11 +14,12 @@ public class Bullet extends GeneralSprite{
 
     // 1 = down , -1 = up
     public void moveUp(){
-        setY(getY() + 10);
-    }
-
-    public void moveDown(){
         setY(getY() - 10);
+        if (getY() < 0) this.setAlive(false);
+    }
+    public void moveDown(){
+        setY(getY() + 10);
+        if (getY() > GameScene.GAME_HEIGHT) this.setAlive(false);
     }
 
 }

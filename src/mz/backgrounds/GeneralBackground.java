@@ -8,7 +8,6 @@ public class GeneralBackground extends Image {
     private double t;
     private int x;
     private double y;
-    private int y2;
 
     public GeneralBackground(String url) {
         super(url);
@@ -39,15 +38,6 @@ public class GeneralBackground extends Image {
     public void setY(double y) {
         this.y = y;
     }
-
-    public int getY2() {
-        return y2;
-    }
-
-    public void setY2(int y2) {
-        this.y2 = y2;
-    }
-
 
     public void draw(GraphicsContext gc){
 //        setT(getT() + 0.01);
