@@ -108,7 +108,7 @@ public class GameScene extends GeneralScene{
     private void drawBullets(GraphicsContext gc) {
         for(Bullet bullet: bullets){
             bullet.draw(gc);
-            bullet.moveDown();
+            bullet.moveUp();
             if (bullet.getY() < 0-bullet.getHeight()){
                 bullet.setAlive(false);
             }

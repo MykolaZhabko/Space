@@ -16,7 +16,6 @@ public abstract class GeneralSprite extends Image {
         super(url);
     }
 
-
     public int getX() {
         return x;
     }

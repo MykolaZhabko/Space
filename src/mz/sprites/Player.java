@@ -2,6 +2,7 @@ package mz.sprites;
 
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.image.Image;
+import mz.periferals.Weapon;
 import mz.scenes.GameScene;
 
 import java.util.Arrays;
@@ -10,6 +11,7 @@ public class Player extends GeneralSprite{
     private Image laser;
     private final int maxX = GameScene.GAME_WIDTH - (int)this.getWidth();
     private final int maxY = GameScene.GAME_HEIGHT - (int)this.getHeight();
+
 
     public Player(String url, double requestedWidth, double requestedHeight, boolean preserveRatio, boolean smooth) {
         super(url, requestedWidth, requestedHeight, preserveRatio, smooth);
