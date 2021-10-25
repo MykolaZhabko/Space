@@ -8,6 +8,7 @@ import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
 import mz.backgrounds.Level1;
 import mz.game.Game;
+import mz.periferals.EnemyGroup;
 import mz.sprites.Bullet;
 import mz.sprites.Enemy;
 import mz.sprites.GeneralSprite;
@@ -21,6 +22,10 @@ public class GameScene extends GeneralScene{
     private Level1 bgL1;
     private ArrayList<String> enemyArmy;
     private ArrayList<Enemy> enemies;
+
+    private EnemyGroup enemyGroup;
+    private ArrayList<Enemy> enemies2;
+
     private ArrayList<Bullet> bullets;
 
     private double time = 0;
@@ -29,6 +34,9 @@ public class GameScene extends GeneralScene{
     public GameScene(){
         player = new Player("SpaceShip.png",50,73,true,true);
         bgL1 = new Level1("Space_bg.png");
+
+        enemyGroup = new EnemyGroup();
+        enemies2 = enemyGroup.groupL1_1();
 
         enemyArmy = new ArrayList<>();
         enemies = new ArrayList<>();
@@ -75,7 +83,7 @@ public class GameScene extends GeneralScene{
                 bgL1.draw(gc);
                 showDevInfo();
                 player.draw(gc);
-                generateEnemies();
+               // generateEnemies();
                 drawEnemies(gc);
                 drawBullets(gc);
 
@@ -124,12 +132,12 @@ public class GameScene extends GeneralScene{
 
     private void drawEnemies(GraphicsContext gc) {
         if (enemies.size() == 0) return;
-        for(Enemy enemy: enemies){
+        for(Enemy enemy: enemies2){
             enemy.draw(gc);
             enemy.moveDown();
         }
 
-        ListIterator<Enemy> aliveEnemies = enemies.listIterator();
+        ListIterator<Enemy> aliveEnemies = enemies2.listIterator();
         while (aliveEnemies.hasNext()){
             if (!aliveEnemies.next().isAlive()){
                 aliveEnemies.remove();
