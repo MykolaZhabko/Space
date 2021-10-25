@@ -2,7 +2,6 @@ package mz.scenes;
 
 import javafx.animation.AnimationTimer;
 import javafx.scene.canvas.GraphicsContext;
-import javafx.scene.image.Image;
 import javafx.scene.input.KeyCode;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
@@ -14,7 +13,6 @@ import mz.sprites.Enemy;
 import mz.sprites.GeneralSprite;
 import mz.sprites.Player;
 
-import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.ListIterator;
 
@@ -48,8 +46,15 @@ public class GameScene extends GeneralScene{
     public void generateEnemies(){
         enemyTime += 0.02;
         if (enemyTime > 1) {
+
+
+
             int enemyRandom = (int) (Math.round(Math.random() * 6));
             Enemy newEnemy = new Enemy(enemyArmy.get(enemyRandom));
+            double enemyWidth = newEnemy.getWidth();
+            double enemyheight = newEnemy.getHeight();
+
+
             newEnemy.setY(0-(int)newEnemy.getHeight());
             newEnemy.setX((int) Math.round(Math.random()*(GameScene.GAME_WIDTH - (int)newEnemy.getWidth())));
             enemies.add(newEnemy);

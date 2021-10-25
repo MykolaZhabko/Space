@@ -10,8 +10,8 @@ import java.util.HashSet;
 import java.util.Set;
 
 public abstract class GeneralScene extends Scene {
-    public static final int GAME_WIDTH = 800;
-    public static final int GAME_HEIGHT = 1000;
+    public static final int GAME_WIDTH = 600;
+    public static final int GAME_HEIGHT = 800;
 
     private StackPane root;
     protected GraphicsContext gc;
