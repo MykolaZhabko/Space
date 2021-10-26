@@ -29,7 +29,9 @@ public class Enemy extends GeneralSprite{
     public Enemy(String url){
         super(url);
     }
-    public void moveDown(){
+
+
+    public void move(){
         setTimer(getTimer() + 0.02);
         if (isOnBattleField()) {
             switch (getType()) {

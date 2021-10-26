@@ -50,8 +50,9 @@ public class GameScene extends GeneralScene{
     }
 
     public void generateEnemies(){
+
         enemyTime += 0.02;
-        if (enemyTime > 1 && enemies.size() < 6) {
+        if (enemyTime > 2 && enemies.size() < 6) {
             Enemy newEnemy = new Enemy("Enemies/Spaceship-Drakir1.png",1);
             newEnemy.setY(0-(int)newEnemy.getHeight());
             newEnemy.setX((int) Math.round(Math.random()*(GameScene.GAME_WIDTH - (int)newEnemy.getWidth())));
@@ -126,7 +127,7 @@ public class GameScene extends GeneralScene{
         if (enemies.size() == 0) return;
         for(Enemy enemy: enemies){
             enemy.draw(gc);
-            enemy.moveDown();
+            enemy.move();
         }
 
         ListIterator<Enemy> aliveEnemies = enemies.listIterator();

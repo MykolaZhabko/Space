@@ -14,7 +14,7 @@ public class Bullet extends GeneralSprite{
 
     // 1 = down , -1 = up
     public void moveUp(){
-        setY(getY() - 10);
+        setY(getY() - 12);
         if (getY() < 0) this.setAlive(false);
     }
     public void moveDown(){
