@@ -23,8 +23,7 @@ public class GameScene extends GeneralScene{
     private ArrayList<String> enemyArmy;
     private ArrayList<Enemy> enemies;
 
-    private EnemyGroup enemyGroup;
-    private ArrayList<Enemy> enemies2;
+
 
     private ArrayList<Bullet> bullets;
 
@@ -35,8 +34,6 @@ public class GameScene extends GeneralScene{
         player = new Player("SpaceShip.png",50,73,true,true);
         bgL1 = new Level1("Space_bg.png");
 
-        enemyGroup = new EnemyGroup();
-        enemies2 = enemyGroup.groupL1_1();
 
         enemyArmy = new ArrayList<>();
         enemies = new ArrayList<>();
@@ -49,24 +46,16 @@ public class GameScene extends GeneralScene{
         enemyArmy.add("Enemies/Spaceship-Drakir5.png");
         enemyArmy.add("Enemies/Spaceship-Drakir6.png");
         enemyArmy.add("Enemies/Spaceship-Drakir7.png");
+//        generateEnemies();
     }
 
     public void generateEnemies(){
         enemyTime += 0.02;
-        if (enemyTime > 1) {
-
-
-
-            int enemyRandom = (int) (Math.round(Math.random() * 6));
-            Enemy newEnemy = new Enemy(enemyArmy.get(enemyRandom));
-            double enemyWidth = newEnemy.getWidth();
-            double enemyheight = newEnemy.getHeight();
-
-
+        if (enemyTime > 1 && enemies.size() < 6) {
+            Enemy newEnemy = new Enemy("Enemies/Spaceship-Drakir1.png",1);
             newEnemy.setY(0-(int)newEnemy.getHeight());
             newEnemy.setX((int) Math.round(Math.random()*(GameScene.GAME_WIDTH - (int)newEnemy.getWidth())));
             enemies.add(newEnemy);
-
             enemyTime = 0;
         }
     }
@@ -81,9 +70,12 @@ public class GameScene extends GeneralScene{
             public void handle(long now) {
                 time += 0.016;
                 bgL1.draw(gc);
+
                 showDevInfo();
+
                 player.draw(gc);
-               // generateEnemies();
+                generateEnemies();
+
                 drawEnemies(gc);
                 drawBullets(gc);
 
@@ -132,18 +124,19 @@ public class GameScene extends GeneralScene{
 
     private void drawEnemies(GraphicsContext gc) {
         if (enemies.size() == 0) return;
-        for(Enemy enemy: enemies2){
+        for(Enemy enemy: enemies){
             enemy.draw(gc);
             enemy.moveDown();
         }
 
-        ListIterator<Enemy> aliveEnemies = enemies2.listIterator();
+        ListIterator<Enemy> aliveEnemies = enemies.listIterator();
         while (aliveEnemies.hasNext()){
             if (!aliveEnemies.next().isAlive()){
                 aliveEnemies.remove();
 
             }
         }
+
     }
 
     public void showDevInfo(){
@@ -154,6 +147,9 @@ public class GameScene extends GeneralScene{
         gc.fillText(info, 0,12);
         String bulletList = "Bullet list size:  " + bullets.size();
         gc.fillText(bulletList, 0,24);
+
+        gc.setLineWidth(1.0);
+        gc.strokeLine(0,GameScene.GAME_HEIGHT/2,GameScene.GAME_WIDTH,GameScene.GAME_HEIGHT/2);
     }
 
     public void keyPressHandler(AnimationTimer timer){
@@ -188,4 +184,6 @@ public class GameScene extends GeneralScene{
             Game.exit();
         }
     }
+
+
 }

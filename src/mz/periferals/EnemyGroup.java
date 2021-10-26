@@ -9,8 +9,16 @@ import java.util.ArrayList;
 public class EnemyGroup {
     private ArrayList<Enemy> enemyGroup;
 
+    public ArrayList<Enemy> getEnemyGroup() {
+        return enemyGroup;
+    }
+
+    public void setEnemyGroup(ArrayList<Enemy> enemyGroup) {
+        this.enemyGroup = enemyGroup;
+    }
+
     public EnemyGroup(){
-        enemyGroup = new ArrayList<>();
+        enemyGroup = groupL1_1();
         
     }
 
@@ -22,10 +30,12 @@ public class EnemyGroup {
         int initialY = 0 - enemyHeight;
         for (int i = 0; i < (GameScene.GAME_WIDTH/enemyWidth)/2; i++)
         {
+            System.out.println("Enemy #" + i + " Aded");
             Enemy enemy = new Enemy("Enemies/Spaceship-Drakir1.png");
             enemy.setX(initialX);
             enemy.setY(initialY);
             initialX += (enemyWidth*2);
+            group.add(enemy);
         }
         return group;
     }
