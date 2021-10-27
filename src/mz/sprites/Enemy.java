@@ -3,13 +3,17 @@ package mz.sprites;
 import javafx.scene.canvas.GraphicsContext;
 import mz.scenes.GameScene;
 
+import java.util.ArrayList;
 import java.util.Random;
 
 public class Enemy extends GeneralSprite{
     private int type;
     private double timer;
+    private double shootTimer;
     private int direction;
     private boolean isOnBattleField;
+
+    private ArrayList<Bullet> allBullets;
 
     private final int[] ALL_DIRRECTION = new int[]{0,1,2,3,4,5};
     private final int[] LEFT_RIGHT_DOWN = new int[]{0,1,4,5};
@@ -23,6 +27,8 @@ public class Enemy extends GeneralSprite{
         super(url, 42, 39, true, true);
         setType(type);
         setTimer(0);
+        setShootTimer(0);
+        allBullets = new ArrayList<>();
         setOnBattleField(false);
     }
 
@@ -100,6 +106,17 @@ public class Enemy extends GeneralSprite{
 
     }
 
+    public void shoot(){
+        ArrayList<Bullet> bullets = getAllBullets();
+        Bullet bullet = new Bullet("Enemies/weapon/laserEnemy1.png");
+
+        bullet.setX(this.getX() + (int)this.getWidth()/2);
+        bullet.setY(this.getY() + (int)this.getHeight()/2);
+
+        bullets.add(bullet);
+        setAllBullets(bullets);
+    }
+
     public int getType() {
         return type;
     }
@@ -114,6 +131,14 @@ public class Enemy extends GeneralSprite{
 
     public void setTimer(double timer) {
         this.timer = timer;
+    }
+
+    public double getShootTimer() {
+        return shootTimer;
+    }
+
+    public void setShootTimer(double shootTimer) {
+        this.shootTimer = shootTimer;
     }
 
     public int getDirection() {
@@ -134,5 +159,13 @@ public class Enemy extends GeneralSprite{
     public int getRandom(int[] array) {
         int rnd = new Random().nextInt(array.length);
         return array[rnd];
+    }
+
+    public ArrayList<Bullet> getAllBullets() {
+        return allBullets;
+    }
+
+    public void setAllBullets(ArrayList<Bullet> allBullets) {
+        this.allBullets = allBullets;
     }
 }

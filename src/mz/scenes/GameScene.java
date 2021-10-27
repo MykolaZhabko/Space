@@ -126,8 +126,17 @@ public class GameScene extends GeneralScene{
     private void drawEnemies(GraphicsContext gc) {
         if (enemies.size() == 0) return;
         for(Enemy enemy: enemies){
+            enemy.setShootTimer(enemy.getShootTimer() + Math.random()/10);
+            if (enemy.getShootTimer() > 4){
+                enemy.shoot();
+                enemy.setShootTimer(0);
+            }
             enemy.draw(gc);
             enemy.move();
+            for(Bullet bullet: enemy.getAllBullets()){
+                bullet.draw(gc);
+                bullet.moveDown();
+            }
         }
 
         ListIterator<Enemy> aliveEnemies = enemies.listIterator();

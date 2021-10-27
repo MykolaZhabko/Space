@@ -3,6 +3,8 @@ package mz.sprites;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.image.Image;
 
+import java.util.ArrayList;
+
 public abstract class GeneralSprite extends Image {
     private int x;
     private int y;
