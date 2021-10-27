@@ -2,6 +2,9 @@ package mz.sprites;
 
 import javafx.scene.canvas.GraphicsContext;
 import mz.scenes.GameScene;
+import javafx.scene.media.Media;
+import javafx.scene.media.MediaPlayer;
+import java.io.File;
 
 import java.util.ArrayList;
 import java.util.Random;
@@ -12,8 +15,6 @@ public class Enemy extends GeneralSprite{
     private double shootTimer;
     private int direction;
     private boolean isOnBattleField;
-
-    private ArrayList<Bullet> allBullets;
 
     private final int[] ALL_DIRRECTION = new int[]{0,1,2,3,4,5};
     private final int[] LEFT_RIGHT_DOWN = new int[]{0,1,4,5};
@@ -28,7 +29,6 @@ public class Enemy extends GeneralSprite{
         setType(type);
         setTimer(0);
         setShootTimer(0);
-        allBullets = new ArrayList<>();
         setOnBattleField(false);
     }
 
@@ -107,14 +107,13 @@ public class Enemy extends GeneralSprite{
     }
 
     public void shoot(){
-        ArrayList<Bullet> bullets = getAllBullets();
-        Bullet bullet = new Bullet("Enemies/weapon/laserEnemy1.png");
+            Bullet bullet = new Bullet("Enemies/weapon/laserEnemy1.png",8,20,true,true);
 
-        bullet.setX(this.getX() + (int)this.getWidth()/2);
-        bullet.setY(this.getY() + (int)this.getHeight()/2);
+            bullet.setX(this.getX() + (int)this.getWidth()/2);
+            bullet.setY(this.getY() + (int)this.getHeight()/2);
 
-        bullets.add(bullet);
-        setAllBullets(bullets);
+            GameScene.enemyBullets.add(bullet);
+            GameScene.soundManager.playSound("laser2");
     }
 
     public int getType() {
@@ -161,11 +160,4 @@ public class Enemy extends GeneralSprite{
         return array[rnd];
     }
 
-    public ArrayList<Bullet> getAllBullets() {
-        return allBullets;
-    }
-
-    public void setAllBullets(ArrayList<Bullet> allBullets) {
-        this.allBullets = allBullets;
-    }
 }

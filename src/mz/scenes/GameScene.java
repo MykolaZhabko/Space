@@ -8,7 +8,7 @@ import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
 import mz.backgrounds.Level1;
 import mz.game.Game;
-import mz.periferals.EnemyGroup;
+import mz.periferals.SoundManager;
 import mz.sprites.Bullet;
 import mz.sprites.Enemy;
 import mz.sprites.GeneralSprite;
@@ -22,22 +22,28 @@ public class GameScene extends GeneralScene{
     private Level1 bgL1;
     private ArrayList<String> enemyArmy;
     private ArrayList<Enemy> enemies;
+    public static SoundManager soundManager;
 
-
-
-    private ArrayList<Bullet> bullets;
+    public static ArrayList<Bullet> playerBullets;
+    public static ArrayList<Bullet> enemyBullets;
 
     private double time = 0;
     private double enemyTime = 0;
 
-    public GameScene(){
+    public GameScene()  {
         player = new Player("SpaceShip.png",50,73,true,true);
         bgL1 = new Level1("Space_bg.png");
 
+        soundManager = new SoundManager(3);
+        soundManager.loadSoundEffects("laser1", "accets/Sounds/laser8.wav");
+        soundManager.loadSoundEffects("laser2","accets/Sounds/laser6.wav");
+        soundManager.loadSoundEffects("explosion","accets/Sounds/explosion.wav");
 
         enemyArmy = new ArrayList<>();
         enemies = new ArrayList<>();
-        bullets = new ArrayList<>();
+        playerBullets = new ArrayList<>();
+        enemyBullets = new ArrayList<>();
+
 
         enemyArmy.add("Enemies/Spaceship-Drakir1.png");
         enemyArmy.add("Enemies/Spaceship-Drakir2.png");
@@ -65,6 +71,11 @@ public class GameScene extends GeneralScene{
 
     @Override
     public void draw() {
+        try {
+            soundManager.loadSoundEffects("laser1", "accets/Sounds/laser8.wav");
+        } catch (Exception e){
+            System.out.println(e.getMessage());
+        }
         activeKeys.clear();
         new AnimationTimer() {
             @Override
@@ -72,13 +83,14 @@ public class GameScene extends GeneralScene{
                 time += 0.016;
                 bgL1.draw(gc);
 
-                showDevInfo();
+                //showDevInfo();
 
                 player.draw(gc);
                 generateEnemies();
 
                 drawEnemies(gc);
                 drawBullets(gc);
+                drawEnemyBullets(gc);
 
                 keyPressHandler(this);
                 collisionDetect();
@@ -87,11 +99,12 @@ public class GameScene extends GeneralScene{
     }
 
     private void collisionDetect() {
-        for(Bullet bullet: bullets){
+        for(Bullet bullet: playerBullets){
             for (GeneralSprite enemy: enemies){
                 if (isColide(bullet,enemy)){
                     System.out.println("BOOOOOM!");
                     enemy.setAlive(false);
+                    soundManager.playSound("explosion");
                     bullet.setAlive(false);
                 }
             }
@@ -107,7 +120,7 @@ public class GameScene extends GeneralScene{
     }
 
     private void drawBullets(GraphicsContext gc) {
-        for(Bullet bullet: bullets){
+        for(Bullet bullet: playerBullets){
             bullet.draw(gc);
             bullet.moveUp();
             if (bullet.getY() < 0-bullet.getHeight()){
@@ -115,10 +128,24 @@ public class GameScene extends GeneralScene{
             }
         }
 
-        ListIterator<Bullet> aliveBullets = bullets.listIterator();
+        ListIterator<Bullet> aliveBullets = playerBullets.listIterator();
         while (aliveBullets.hasNext()){
             if (!aliveBullets.next().isAlive()){
                 aliveBullets.remove();
+            }
+        }
+    }
+
+    private void drawEnemyBullets(GraphicsContext gc){
+        for(Bullet bullet: enemyBullets){
+            bullet.draw(gc);
+            bullet.moveDown();
+        }
+
+        ListIterator<Bullet> aliveEnemyByllets = enemyBullets.listIterator();
+        while (aliveEnemyByllets.hasNext()){
+            if (!aliveEnemyByllets.next().isAlive()){
+                aliveEnemyByllets.remove();
             }
         }
     }
@@ -127,16 +154,13 @@ public class GameScene extends GeneralScene{
         if (enemies.size() == 0) return;
         for(Enemy enemy: enemies){
             enemy.setShootTimer(enemy.getShootTimer() + Math.random()/10);
-            if (enemy.getShootTimer() > 4){
+            if (enemy.getShootTimer() > 4) {
                 enemy.shoot();
                 enemy.setShootTimer(0);
             }
             enemy.draw(gc);
             enemy.move();
-            for(Bullet bullet: enemy.getAllBullets()){
-                bullet.draw(gc);
-                bullet.moveDown();
-            }
+
         }
 
         ListIterator<Enemy> aliveEnemies = enemies.listIterator();
@@ -155,7 +179,7 @@ public class GameScene extends GeneralScene{
         gc.setFill(Color.WHITE);
         String info = "Player x: " + player.getX() + ", y: " + player.getY();
         gc.fillText(info, 0,12);
-        String bulletList = "Bullet list size:  " + bullets.size();
+        String bulletList = "Bullet list size:  " + playerBullets.size();
         gc.fillText(bulletList, 0,24);
 
         gc.setLineWidth(1.0);
@@ -181,16 +205,18 @@ public class GameScene extends GeneralScene{
         }
         if (activeKeys.contains(KeyCode.SPACE)){
             if(time > 0.3) {
+                    soundManager.playSound("laser1");
                 Bullet bullet = new Bullet("weapon/laserGreen1.png");
 
                 bullet.setX(player.getX() + (int)player.getWidth() / 2);
                 bullet.setY(player.getY());
-                bullets.add(bullet);
+                playerBullets.add(bullet);
                 time = 0;
             }
         }
         if (activeKeys.contains(KeyCode.ESCAPE)){
             timer.stop();
+            soundManager.shutdown();
             Game.exit();
         }
     }
