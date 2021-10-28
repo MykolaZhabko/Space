@@ -8,61 +8,57 @@ import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
 import mz.backgrounds.Level1;
 import mz.game.Game;
+import mz.periferals.GameConstants;
 import mz.periferals.SoundManager;
-import mz.sprites.Bullet;
-import mz.sprites.Enemy;
-import mz.sprites.GeneralSprite;
-import mz.sprites.Player;
+import mz.sprites.*;
 
 import java.util.ArrayList;
+import java.util.LinkedList;
 import java.util.ListIterator;
+import java.util.Queue;
 
-public class GameScene extends GeneralScene{
+public class GameScene extends GeneralScene implements GameConstants {
     private Player player;
     private Level1 bgL1;
-    private ArrayList<String> enemyArmy;
     private ArrayList<Enemy> enemies;
     public static SoundManager soundManager;
 
-    public static ArrayList<Bullet> playerBullets;
-    public static ArrayList<Bullet> enemyBullets;
+    public static ArrayList<Weapon> playerWeapons;
+    public static ArrayList<Weapon> enemyWeapons;
+
+    private Queue<Enemy> allEnemies;
 
     private double time = 0;
     private double enemyTime = 0;
 
-    public GameScene()  {
-        player = new Player("SpaceShip.png",50,73,true,true);
+    public GameScene() throws InterruptedException {
+        player = new Player(playerLevel1,50,73,true,true);
         bgL1 = new Level1("Space_bg.png");
 
-        soundManager = new SoundManager(3);
-        soundManager.loadSoundEffects("laser1", "accets/Sounds/laser8.wav");
+        soundManager = new SoundManager(10);
+        soundManager.loadSoundEffects("laser1", "accets/Sounds/weaponfire6.wav");
         soundManager.loadSoundEffects("laser2","accets/Sounds/laser6.wav");
-        soundManager.loadSoundEffects("explosion","accets/Sounds/explosion.wav");
+        soundManager.loadSoundEffects("explosion","accets/Sounds/explosion4.wav");
+        soundManager.loadSoundEffects("explosionFighter","accets/Sounds/explosion2.wav");
 
-        enemyArmy = new ArrayList<>();
+        allEnemies = new LinkedList<>();
+        for (int i = 0; i<140;i++){
+
+            Enemy newEnemy = new Enemy("Enemies/Spaceship-Drakir1.png",1);
+            newEnemy.setY(0-(int)newEnemy.getHeight());
+            newEnemy.setX((int) Math.round(Math.random()*(GAME_WIDTH - (int)newEnemy.getWidth())));
+            allEnemies.add(newEnemy);
+        }
+
         enemies = new ArrayList<>();
-        playerBullets = new ArrayList<>();
-        enemyBullets = new ArrayList<>();
-
-
-        enemyArmy.add("Enemies/Spaceship-Drakir1.png");
-        enemyArmy.add("Enemies/Spaceship-Drakir2.png");
-        enemyArmy.add("Enemies/Spaceship-Drakir3.png");
-        enemyArmy.add("Enemies/Spaceship-Drakir4.png");
-        enemyArmy.add("Enemies/Spaceship-Drakir5.png");
-        enemyArmy.add("Enemies/Spaceship-Drakir6.png");
-        enemyArmy.add("Enemies/Spaceship-Drakir7.png");
-//        generateEnemies();
+        playerWeapons = new ArrayList<>();
+        enemyWeapons = new ArrayList<>();
     }
 
     public void generateEnemies(){
-
         enemyTime += 0.02;
-        if (enemyTime > 2 && enemies.size() < 6) {
-            Enemy newEnemy = new Enemy("Enemies/Spaceship-Drakir1.png",1);
-            newEnemy.setY(0-(int)newEnemy.getHeight());
-            newEnemy.setX((int) Math.round(Math.random()*(GameScene.GAME_WIDTH - (int)newEnemy.getWidth())));
-            enemies.add(newEnemy);
+        if (enemyTime > 2 && enemies.size() < 6 && allEnemies.size() > 0) {
+            enemies.add(allEnemies.poll());
             enemyTime = 0;
         }
     }
@@ -70,12 +66,7 @@ public class GameScene extends GeneralScene{
 
 
     @Override
-    public void draw() {
-        try {
-            soundManager.loadSoundEffects("laser1", "accets/Sounds/laser8.wav");
-        } catch (Exception e){
-            System.out.println(e.getMessage());
-        }
+    public void draw() { 
         activeKeys.clear();
         new AnimationTimer() {
             @Override
@@ -83,15 +74,13 @@ public class GameScene extends GeneralScene{
                 time += 0.016;
                 bgL1.draw(gc);
 
-                //showDevInfo();
+                showDevInfo();
 
                 player.draw(gc);
                 generateEnemies();
-
                 drawEnemies(gc);
                 drawBullets(gc);
-                drawEnemyBullets(gc);
-
+                removeDead();
                 keyPressHandler(this);
                 collisionDetect();
             }
@@ -99,16 +88,35 @@ public class GameScene extends GeneralScene{
     }
 
     private void collisionDetect() {
-        for(Bullet bullet: playerBullets){
-            for (GeneralSprite enemy: enemies){
-                if (isColide(bullet,enemy)){
-                    System.out.println("BOOOOOM!");
-                    enemy.setAlive(false);
-                    soundManager.playSound("explosion");
-                    bullet.setAlive(false);
+        if(player.isAlive()) {
+            for (Weapon weapon : playerWeapons) {
+                for (GeneralSprite enemy : enemies) {
+                    if (isColide(weapon, enemy)) {
+                        enemy.setHp(enemy.getHp() - weapon.getDamage());
+                        weapon.setAlive(false);
+                        if (enemy.getHp() <= 0) {
+                            enemy.setAlive(false);
+                            soundManager.playSound("explosion");
+                        }
+
+                    }
+                }
+
+            }
+
+        for (Weapon weapon: enemyWeapons){
+            if (isColide(weapon,player)){
+                player.setHp(player.getHp() - weapon.getDamage());
+                weapon.setAlive(false);
+                if (player.getHp() <= 0)
+                {
+                    player.setAlive(false);
+                    soundManager.playSound("explosionFighter");
                 }
             }
         }
+        }
+
     }
 
     private boolean isColide(GeneralSprite a, GeneralSprite b){
@@ -116,39 +124,27 @@ public class GameScene extends GeneralScene{
                 a.getX() <= b.getX() + b.getWidth() &&
                 a.getY() >= b.getY() &&
                 a.getY() <= b.getY() + b.getHeight();
-
     }
 
     private void drawBullets(GraphicsContext gc) {
-        for(Bullet bullet: playerBullets){
-            bullet.draw(gc);
-            bullet.moveUp();
-            if (bullet.getY() < 0-bullet.getHeight()){
-                bullet.setAlive(false);
+        for(Weapon weapon : playerWeapons){
+            weapon.draw(gc);
+            weapon.moveUp();
+            if (weapon.getY() < 0- weapon.getHeight()){
+                weapon.setAlive(false);
             }
         }
 
-        ListIterator<Bullet> aliveBullets = playerBullets.listIterator();
-        while (aliveBullets.hasNext()){
-            if (!aliveBullets.next().isAlive()){
-                aliveBullets.remove();
-            }
-        }
-    }
 
-    private void drawEnemyBullets(GraphicsContext gc){
-        for(Bullet bullet: enemyBullets){
-            bullet.draw(gc);
-            bullet.moveDown();
-        }
-
-        ListIterator<Bullet> aliveEnemyByllets = enemyBullets.listIterator();
-        while (aliveEnemyByllets.hasNext()){
-            if (!aliveEnemyByllets.next().isAlive()){
-                aliveEnemyByllets.remove();
+        for(Weapon weapon : enemyWeapons){
+            weapon.draw(gc);
+            weapon.moveDown();
+            if (weapon.getY() > GAME_HEIGHT){
+                weapon.setAlive(false);
             }
         }
     }
+
 
     private void drawEnemies(GraphicsContext gc) {
         if (enemies.size() == 0) return;
@@ -160,17 +156,7 @@ public class GameScene extends GeneralScene{
             }
             enemy.draw(gc);
             enemy.move();
-
         }
-
-        ListIterator<Enemy> aliveEnemies = enemies.listIterator();
-        while (aliveEnemies.hasNext()){
-            if (!aliveEnemies.next().isAlive()){
-                aliveEnemies.remove();
-
-            }
-        }
-
     }
 
     public void showDevInfo(){
@@ -179,38 +165,42 @@ public class GameScene extends GeneralScene{
         gc.setFill(Color.WHITE);
         String info = "Player x: " + player.getX() + ", y: " + player.getY();
         gc.fillText(info, 0,12);
-        String bulletList = "Bullet list size:  " + playerBullets.size();
+        String bulletList = "Bullet list size:  " + playerWeapons.size();
         gc.fillText(bulletList, 0,24);
+        gc.fillText("Player HP: " + player.getHp(), 0,GAME_HEIGHT-12);
+
 
         gc.setLineWidth(1.0);
         gc.strokeLine(0,GameScene.GAME_HEIGHT/2,GameScene.GAME_WIDTH,GameScene.GAME_HEIGHT/2);
     }
 
     public void keyPressHandler(AnimationTimer timer){
-        if(activeKeys.contains(KeyCode.W)){
+        if(activeKeys.contains(KeyCode.UP)){
             player.move(0,-5);
             System.out.println("Player position: X = " + player.getX() + ", Y = " + player.getY());
         }
-        if(activeKeys.contains(KeyCode.S)){
+        if(activeKeys.contains(KeyCode.DOWN)){
             player.move(0,5);
             System.out.println("Player position: X = " + player.getX() + ", Y = " + player.getY());
         }
-        if(activeKeys.contains(KeyCode.A)) {
+        if(activeKeys.contains(KeyCode.LEFT)) {
             player.move(-5,0);
             System.out.println("Player position: X = " + player.getX() + ", Y = " + player.getY());
         }
-        if(activeKeys.contains(KeyCode.D)){
+        if(activeKeys.contains(KeyCode.RIGHT)){
             System.out.println("Player position: X = " + player.getX() + ", Y = " + player.getY());
             player.move(5,0);
         }
         if (activeKeys.contains(KeyCode.SPACE)){
-            if(time > 0.3) {
-                    soundManager.playSound("laser1");
-                Bullet bullet = new Bullet("weapon/laserGreen1.png");
 
-                bullet.setX(player.getX() + (int)player.getWidth() / 2);
-                bullet.setY(player.getY());
-                playerBullets.add(bullet);
+            if(time > 0.3 && player.isAlive()) {
+                    soundManager.playSound("laser1");
+                Weapon weapon = new Weapon("Player.weapon/laserGreen1.png",6,32,true,true,10);
+
+
+                weapon.setX(player.getX() + (int)player.getWidth() / 2);
+                weapon.setY(player.getY());
+                playerWeapons.add(weapon);
                 time = 0;
             }
         }
@@ -221,5 +211,28 @@ public class GameScene extends GeneralScene{
         }
     }
 
+    private void removeDead(){
+        ListIterator<Enemy> aliveEnemies = enemies.listIterator();
+        while (aliveEnemies.hasNext()){
+            if (!aliveEnemies.next().getExplosion().isAlive()){
+                aliveEnemies.remove();
+
+            }
+        }
+
+        ListIterator<Weapon> aliveEnemyByllets = enemyWeapons.listIterator();
+        while (aliveEnemyByllets.hasNext()){
+            if (!aliveEnemyByllets.next().isAlive()){
+                aliveEnemyByllets.remove();
+            }
+        }
+
+        ListIterator<Weapon> aliveBullets = playerWeapons.listIterator();
+        while (aliveBullets.hasNext()){
+            if (!aliveBullets.next().isAlive()){
+                aliveBullets.remove();
+            }
+        }
+    }
 
 }

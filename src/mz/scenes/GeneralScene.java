@@ -5,14 +5,12 @@ import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.input.KeyCode;
 import javafx.scene.layout.StackPane;
+import mz.periferals.GameConstants;
 
 import java.util.HashSet;
 import java.util.Set;
 
-public abstract class GeneralScene extends Scene {
-    public static final int GAME_WIDTH = 600;
-    public static final int GAME_HEIGHT = 800;
-
+public abstract class GeneralScene extends Scene implements GameConstants {
     private StackPane root;
     protected GraphicsContext gc;
     protected Set<KeyCode> activeKeys;

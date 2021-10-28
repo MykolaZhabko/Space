@@ -9,8 +9,8 @@ import java.util.concurrent.Executors;
 import java.util.concurrent.ExecutorService;
 
 public class SoundManager {
-    public ExecutorService soundPool;
-    public Map<String, AudioClip> soundEffectsMap = new HashMap<>();
+    ExecutorService soundPool;
+    Map<String, AudioClip> soundEffectsMap = new HashMap<>();
 
     public SoundManager(int numberOfThreads){
         soundPool = Executors.newFixedThreadPool(numberOfThreads);
