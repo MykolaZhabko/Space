@@ -74,7 +74,7 @@ public class GameScene extends GeneralScene implements GameConstants {
                 time += 0.016;
                 bgL1.draw(gc);
 
-                showDevInfo();
+                //showDevInfo();
 
                 player.draw(gc);
                 generateEnemies();

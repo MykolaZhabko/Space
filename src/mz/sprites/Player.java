@@ -2,17 +2,20 @@ package mz.sprites;
 
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.image.Image;
+import javafx.scene.paint.Color;
 import mz.periferals.GameConstants;
 
 public class Player extends GeneralSprite implements GameConstants {
     private final int maxX = GAME_WIDTH - (int)this.getWidth();
     private final int maxY = GAME_HEIGHT - (int)this.getHeight();
     private Explosion explosion;
+    private int initialHP;
 
 
     public Player(String url, double requestedWidth, double requestedHeight, boolean preserveRatio, boolean smooth) {
         super(url, requestedWidth, requestedHeight, preserveRatio, smooth);
         setHp(100);
+        initialHP = (int) this.getHp();
         setX(GAME_WIDTH/2 - (int)this.getWidth()/2);
         setY(GAME_HEIGHT - (int)this.getHeight()*2);
         explosion = new Explosion(getX(),getY(),1);
@@ -21,6 +24,8 @@ public class Player extends GeneralSprite implements GameConstants {
     @Override
     public void draw(GraphicsContext gc) {
         if (isAlive()) {
+            gc.setFill(Color.GREEN);
+            gc.strokeLine(getX(), getY()+this.getHeight() +  2, getX() + getWidth() * (getHp() / initialHP), getY()+this.getHeight() + 2);
             gc.drawImage(this, getX(), getY());
             explosion.setX(getX());
             explosion.setY(getY());

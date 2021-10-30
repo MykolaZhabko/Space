@@ -9,7 +9,6 @@ public interface GameConstants {
     String playerLevel1 = "SpaceShip.png";
     Image explosion3 = new Image("Explosions/explosion 3.png");
     Image explosion4 = new Image("Explosions/explosion 4.png");
-    int ENEMY = 0;
-    int PLAYER = 1;
+
 
 }

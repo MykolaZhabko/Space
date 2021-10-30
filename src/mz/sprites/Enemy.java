@@ -41,7 +41,6 @@ public class Enemy extends GeneralSprite{
     @Override
     public void draw(GraphicsContext gc) {
         if (isAlive()) {
-            gc.fillText("hp:" + getHp(), getX(), getY() - 12);
             gc.setStroke(Color.GREEN);
             gc.strokeLine(getX(), getY() - 2, getX() + getWidth() * (getHp() / initialHP), getY() - 2);
             gc.drawImage(this, getX(), getY());
