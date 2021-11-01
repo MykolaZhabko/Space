@@ -13,11 +13,12 @@ import java.util.Set;
 public abstract class GeneralScene extends Scene implements GameConstants {
     private StackPane root;
     protected GraphicsContext gc;
+    protected GraphicsContext gcUi;
     protected Set<KeyCode> activeKeys;
     protected Set<KeyCode> releasedKeys;
 
     public GeneralScene(){
-        super(new StackPane(), GAME_WIDTH, GAME_HEIGHT);
+        super(new StackPane(), UI_WIDTH, UI_HEIGHT);
 
         this.root = new StackPane();
         this.setRoot(this.root);
@@ -33,10 +34,13 @@ public abstract class GeneralScene extends Scene implements GameConstants {
             activeKeys.remove(event.getCode());
             releasedKeys.add(event.getCode());
         });
-
+        Canvas ui = new Canvas(GAME_WIDTH+100,GAME_HEIGHT+100);
         Canvas canvas = new Canvas(GAME_WIDTH, GAME_HEIGHT);
-        this.root.getChildren().add(canvas);
+        root.getChildren().add(ui);
+        root.getChildren().add(canvas);
+
         gc = canvas.getGraphicsContext2D();
+        gcUi = ui.getGraphicsContext2D();
     }
 
     public abstract void draw();

@@ -15,6 +15,7 @@ public class Enemy extends GeneralSprite implements GameConstants {
     private double shootTimer;
     private int direction;
     private boolean isOnBattleField;
+    private int points;
     private Explosion explosion;
 
     private final int[] ALL_DIRRECTION = new int[]{0,1,2,3,4,5};
@@ -28,6 +29,7 @@ public class Enemy extends GeneralSprite implements GameConstants {
     public Enemy(int type) {
         setHp(20);
         setSprite(enemy);
+        setPoints(10);
         initialHP = (int) this.getHp();
         setType(type);
         setTimer(0);
@@ -179,4 +181,11 @@ public class Enemy extends GeneralSprite implements GameConstants {
         return explosion;
     }
 
+    public int getPoints() {
+        return points;
+    }
+
+    public void setPoints(int points) {
+        this.points = points;
+    }
 }

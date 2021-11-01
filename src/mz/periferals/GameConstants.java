@@ -7,7 +7,9 @@ import mz.sprites.Weapon;
 public interface GameConstants {
     int GAME_WIDTH = 600;
     int GAME_HEIGHT = 800;
-    String playerLevel1 = "SpaceShip.png";
+    int UI_WIDTH = 700;
+    int UI_HEIGHT = 900;
+    Image UI = new Image("UIBACK.png",700,900,false,true);
     Image explosion3 = new Image("Explosions/explosion 3.png");
     Image explosion4 = new Image("Explosions/explosion 4.png");
     Image enemy = new Image("Enemies/Spaceship-Drakir1.png",42, 39, true, true);

@@ -23,7 +23,9 @@ public class Weapon extends GeneralSprite implements GameConstants {
 
     @Override
     public void draw(GraphicsContext gc) {
+
         gc.drawImage(getSprite(),getX(),getY());
+
     }
 
     // 1 = down , -1 = up
