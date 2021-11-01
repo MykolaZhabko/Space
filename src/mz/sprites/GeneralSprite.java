@@ -5,19 +5,17 @@ import javafx.scene.image.Image;
 
 import java.util.ArrayList;
 
-public abstract class GeneralSprite extends Image {
+public abstract class GeneralSprite{
     private int x;
     private int y;
     private double hp;
     private boolean isAlive = true;
+    private Image sprite;
 
-    public GeneralSprite(String url, double requestedWidth, double requestedHeight, boolean preserveRatio, boolean smooth) {
-        super(url, requestedWidth, requestedHeight, preserveRatio, smooth);
+    public GeneralSprite() {
+
     }
 
-    public GeneralSprite(String url) {
-        super(url);
-    }
     public int getX() {
         return x;
     }
@@ -42,5 +40,12 @@ public abstract class GeneralSprite extends Image {
     public void setHp(double hp) {
         this.hp = hp;
     }
+    public Image getSprite() {
+        return sprite;
+    }
+    public void setSprite(Image sprite) {
+        this.sprite = sprite;
+    }
     public abstract void draw(GraphicsContext gc);
+
 }

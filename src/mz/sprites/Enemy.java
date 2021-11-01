@@ -1,12 +1,14 @@
 package mz.sprites;
 
 import javafx.scene.canvas.GraphicsContext;
+import javafx.scene.image.Image;
 import javafx.scene.paint.Color;
+import mz.periferals.GameConstants;
 import mz.scenes.GameScene;
 
 import java.util.Random;
 
-public class Enemy extends GeneralSprite{
+public class Enemy extends GeneralSprite implements GameConstants {
     private int type;
     private int initialHP;
     private double timer;
@@ -23,9 +25,9 @@ public class Enemy extends GeneralSprite{
 
 
 
-    public Enemy(String url,int type) {
-        super(url, 42, 39, true, true);
+    public Enemy(int type) {
         setHp(20);
+        setSprite(enemy);
         initialHP = (int) this.getHp();
         setType(type);
         setTimer(0);
@@ -34,16 +36,12 @@ public class Enemy extends GeneralSprite{
         explosion = new Explosion(getX(),getY(),0);
     }
 
-    public Enemy(String url){
-        super(url);
-    }
-
     @Override
     public void draw(GraphicsContext gc) {
         if (isAlive()) {
             gc.setStroke(Color.GREEN);
-            gc.strokeLine(getX(), getY() - 2, getX() + getWidth() * (getHp() / initialHP), getY() - 2);
-            gc.drawImage(this, getX(), getY());
+            gc.strokeLine(getX(), getY() - 2, getX() + getSprite().getWidth() * (getHp() / initialHP), getY() - 2);
+            gc.drawImage(getSprite(), getX(), getY());
             explosion.setX(getX());
             explosion.setY(getY());
         }else{
@@ -98,7 +96,7 @@ public class Enemy extends GeneralSprite{
                 }
             } else {
                 setY(getY() + 1);
-                if (getY() > this.getHeight()) setOnBattleField(true);
+                if (getY() > getSprite().getHeight()) setOnBattleField(true);
             }
         }
     }
@@ -108,7 +106,7 @@ public class Enemy extends GeneralSprite{
         {
             setDirection(getRandom(RIGHT_UP_DOWN));
             return;
-        }else if (x + this.getWidth() >= GameScene.GAME_WIDTH && y >= 0)
+        }else if (x + getSprite().getWidth() >= GameScene.GAME_WIDTH && y >= 0)
         {
             setDirection(getRandom(LEFT_UP_DOWN));
             return;
@@ -125,10 +123,10 @@ public class Enemy extends GeneralSprite{
     }
 
     public void shoot(){
-            Weapon weapon = new Weapon("Enemies/weapon/laserEnemy1.png",8,20,true,true,5);
+            Weapon weapon = new Weapon(1,5);
 
-            weapon.setX(this.getX() + (int)this.getWidth()/2);
-            weapon.setY(this.getY() + (int)this.getHeight()/2);
+            weapon.setX(this.getX() + (int)getSprite().getWidth()/2);
+            weapon.setY(this.getY() + (int)getSprite().getHeight()/2);
 
             GameScene.enemyWeapons.add(weapon);
             GameScene.soundManager.playSound("laser2");
@@ -177,8 +175,8 @@ public class Enemy extends GeneralSprite{
         int rnd = new Random().nextInt(array.length);
         return array[rnd];
     }
-
     public Explosion getExplosion() {
         return explosion;
     }
+
 }

@@ -1,29 +1,34 @@
 package mz.sprites;
 
 import javafx.scene.canvas.GraphicsContext;
+import javafx.scene.image.Image;
 import mz.periferals.GameConstants;
 import mz.scenes.GameScene;
 
 public class Weapon extends GeneralSprite implements GameConstants {
     private int damage;
 
-    public Weapon(String url){
-        super(url);
+    public Weapon(int type, int damage){
+        switch (type){
+            case 0:
+                setSprite(playerWeapon);
+                break;
+            case 1:
+                setSprite(enemyWeapon);
+                break;
+        }
+
+        this.damage = damage;
     }
 
     @Override
     public void draw(GraphicsContext gc) {
-        gc.drawImage(this,getX(),getY());
-    }
-
-    public Weapon(String url, double requestedWidth, double requestedHeight, boolean preserveRatio, boolean smooth, int damge) {
-        super(url, requestedWidth, requestedHeight, preserveRatio, smooth);
-        this.damage = damge;
+        gc.drawImage(getSprite(),getX(),getY());
     }
 
     // 1 = down , -1 = up
     public void moveUp(){
-        setY(getY() - 12);
+        setY(getY() - 17);
         if (getY() < 0) this.setAlive(false);
     }
     public void moveDown(){
@@ -34,4 +39,6 @@ public class Weapon extends GeneralSprite implements GameConstants {
     public int getDamage() {
         return damage;
     }
+
+
 }

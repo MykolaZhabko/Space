@@ -6,18 +6,20 @@ import javafx.scene.paint.Color;
 import mz.periferals.GameConstants;
 
 public class Player extends GeneralSprite implements GameConstants {
-    private final int maxX = GAME_WIDTH - (int)this.getWidth();
-    private final int maxY = GAME_HEIGHT - (int)this.getHeight();
+    private int maxX;
+    private int maxY;
     private Explosion explosion;
     private int initialHP;
 
-
-    public Player(String url, double requestedWidth, double requestedHeight, boolean preserveRatio, boolean smooth) {
-        super(url, requestedWidth, requestedHeight, preserveRatio, smooth);
+    public Player() {
         setHp(100);
+        setSprite(player);
         initialHP = (int) this.getHp();
-        setX(GAME_WIDTH/2 - (int)this.getWidth()/2);
-        setY(GAME_HEIGHT - (int)this.getHeight()*2);
+        setX(GAME_WIDTH/2 - (int)getSprite().getWidth()/2);
+        setY(GAME_HEIGHT - (int)getSprite().getHeight()*2);
+        maxX = GAME_WIDTH - (int)getSprite().getWidth();
+        maxY = GAME_HEIGHT - (int)getSprite().getHeight();
+
         explosion = new Explosion(getX(),getY(),1);
     }
 
@@ -25,8 +27,8 @@ public class Player extends GeneralSprite implements GameConstants {
     public void draw(GraphicsContext gc) {
         if (isAlive()) {
             gc.setFill(Color.GREEN);
-            gc.strokeLine(getX(), getY()+this.getHeight() +  2, getX() + getWidth() * (getHp() / initialHP), getY()+this.getHeight() + 2);
-            gc.drawImage(this, getX(), getY());
+            gc.strokeLine(getX(), getY()+getSprite().getHeight() +  2, getX() + getSprite().getWidth() * (getHp() / initialHP), getY()+getSprite().getHeight() + 2);
+            gc.drawImage(getSprite(), getX(), getY());
             explosion.setX(getX());
             explosion.setY(getY());
         }else {

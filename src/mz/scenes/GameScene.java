@@ -26,13 +26,11 @@ public class GameScene extends GeneralScene implements GameConstants {
     public static ArrayList<Weapon> playerWeapons;
     public static ArrayList<Weapon> enemyWeapons;
 
-    private Queue<Enemy> allEnemies;
-
     private double time = 0;
     private double enemyTime = 0;
 
     public GameScene() throws InterruptedException {
-        player = new Player(playerLevel1,50,73,true,true);
+        player = new Player();
         bgL1 = new Level1("Space_bg.png");
 
         soundManager = new SoundManager(10);
@@ -41,14 +39,6 @@ public class GameScene extends GeneralScene implements GameConstants {
         soundManager.loadSoundEffects("explosion","accets/Sounds/explosion4.wav");
         soundManager.loadSoundEffects("explosionFighter","accets/Sounds/explosion2.wav");
 
-        allEnemies = new LinkedList<>();
-        for (int i = 0; i<140;i++){
-
-            Enemy newEnemy = new Enemy("Enemies/Spaceship-Drakir1.png",1);
-            newEnemy.setY(0-(int)newEnemy.getHeight());
-            newEnemy.setX((int) Math.round(Math.random()*(GAME_WIDTH - (int)newEnemy.getWidth())));
-            allEnemies.add(newEnemy);
-        }
 
         enemies = new ArrayList<>();
         playerWeapons = new ArrayList<>();
@@ -57,9 +47,12 @@ public class GameScene extends GeneralScene implements GameConstants {
 
     public void generateEnemies(){
         enemyTime += 0.02;
-        if (enemyTime > 2 && enemies.size() < 6 && allEnemies.size() > 0) {
-            enemies.add(allEnemies.poll());
-            enemyTime = 0;
+        if (enemyTime > 2 && enemies.size() < 6) {
+            Enemy newEnemy = new Enemy(1);
+            newEnemy.setY(0-(int)newEnemy.getSprite().getHeight());
+            newEnemy.setX((int) Math.round(Math.random()*(GAME_WIDTH - (int)newEnemy.getSprite().getWidth())));
+            enemies.add(newEnemy);
+            enemyTime=0;
         }
     }
 
@@ -121,16 +114,16 @@ public class GameScene extends GeneralScene implements GameConstants {
 
     private boolean isColide(GeneralSprite a, GeneralSprite b){
         return  a.getX() >= b.getX() &&
-                a.getX() <= b.getX() + b.getWidth() &&
+                a.getX() <= b.getX() + b.getSprite().getWidth() &&
                 a.getY() >= b.getY() &&
-                a.getY() <= b.getY() + b.getHeight();
+                a.getY() <= b.getY() + b.getSprite().getHeight();
     }
 
     private void drawBullets(GraphicsContext gc) {
         for(Weapon weapon : playerWeapons){
             weapon.draw(gc);
             weapon.moveUp();
-            if (weapon.getY() < 0- weapon.getHeight()){
+            if (weapon.getY() < 0- weapon.getSprite().getHeight()){
                 weapon.setAlive(false);
             }
         }
@@ -195,10 +188,10 @@ public class GameScene extends GeneralScene implements GameConstants {
 
             if(time > 0.3 && player.isAlive()) {
                     soundManager.playSound("laser1");
-                Weapon weapon = new Weapon("Player.weapon/laserGreen1.png",6,32,true,true,10);
+                Weapon weapon = new Weapon(0,10);
 
 
-                weapon.setX(player.getX() + (int)player.getWidth() / 2);
+                weapon.setX(player.getX() + (int)player.getSprite().getWidth() / 2);
                 weapon.setY(player.getY());
                 playerWeapons.add(weapon);
                 time = 0;
