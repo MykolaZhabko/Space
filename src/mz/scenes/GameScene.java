@@ -15,7 +15,7 @@ import mz.sprites.*;
 import java.util.*;
 
 public class GameScene extends GeneralScene implements GameConstants {
-    private Player player;
+    public static Player player;
     private Level1 bgL1;
     private ArrayList<Enemy> enemies;
     public static SoundManager soundManager;
@@ -32,7 +32,7 @@ public class GameScene extends GeneralScene implements GameConstants {
         player = new Player();
         bgL1 = new Level1("Space_bg.png");
 
-        soundManager = new SoundManager(10);
+        soundManager = new SoundManager(5);
         soundManager.loadSoundEffects("laser1", "accets/Sounds/weaponfire6.wav");
         soundManager.loadSoundEffects("laser2","accets/Sounds/laser6.wav");
         soundManager.loadSoundEffects("explosion","accets/Sounds/explosion4.wav");
@@ -103,6 +103,7 @@ public class GameScene extends GeneralScene implements GameConstants {
     private void drawFeaturesDrop() {
         for (FeatureDrop drop: featuresDrop){
             drop.draw(gc);
+            drop.collideWithPlayer(player);
         }
     }
 
@@ -110,14 +111,14 @@ public class GameScene extends GeneralScene implements GameConstants {
         if(player.isAlive()) {
             for (Weapon weapon : playerWeapons) {
                 for (GeneralSprite enemy : enemies) {
-                    if (isColide(weapon, enemy)) {
+                    if (isCollide(weapon, enemy)) {
                         enemy.setHp(enemy.getHp() - weapon.getDamage());
                         weapon.setAlive(false);
                         if (enemy.getHp() <= 0) {
                             if (enemy.isAlive()) {
                                 soundManager.playSound("explosion");
-                                if (getRandom(7) == 1)
-                                featuresDrop.add(new FeatureDrop(enemy.getX(), enemy.getY(), getRandom(3)));
+                                if (getRandom(2) == 1)
+                                featuresDrop.add(new FeatureDrop(enemy.getX(), enemy.getY(), getRandom(4)));
                                 enemy.setAlive(false);
                                 player.setScore(player.getScore()+((Enemy) enemy).getPoints());
                             }
@@ -129,7 +130,7 @@ public class GameScene extends GeneralScene implements GameConstants {
             }
 
         for (Weapon weapon: enemyWeapons){
-            if (isColide(weapon,player)){
+            if (isCollide(weapon,player)){
                 player.setHp(player.getHp() - weapon.getDamage());
                 weapon.setAlive(false);
                 if (player.getHp() <= 0)
@@ -143,7 +144,7 @@ public class GameScene extends GeneralScene implements GameConstants {
 
     }
 
-    private boolean isColide(GeneralSprite a, GeneralSprite b){
+    private boolean isCollide(GeneralSprite a, GeneralSprite b){
         return  a.getX() >= b.getX() &&
                 a.getX() <= b.getX() + b.getSprite().getWidth() &&
                 a.getY() >= b.getY() &&
@@ -192,6 +193,7 @@ public class GameScene extends GeneralScene implements GameConstants {
         String bulletList = "Bullet list size:  " + playerWeapons.size();
         gc.fillText(bulletList, 0,24);
         gc.fillText("Player HP: " + player.getHp(), 0,GAME_HEIGHT-12);
+        gc.fillText("Feature list: " + featuresDrop.size(), 0,36);
 
 
         gc.setLineWidth(1.0);
@@ -217,23 +219,9 @@ public class GameScene extends GeneralScene implements GameConstants {
         }
         if (activeKeys.contains(KeyCode.SPACE)){
 
-            if(time > 0.3 && player.isAlive()) {
-                    soundManager.playSound("laser1");
-                Weapon weapon = new Weapon(0,10);
-                Weapon weapon2 = new Weapon(0,10);
-                Weapon weapon3 = new Weapon(0,10);
 
-                weapon.setX(player.getX() + (int)player.getSprite().getWidth() / 2);
-                weapon.setY(player.getY());
-                weapon2.setX(player.getX() + (int)player.getSprite().getWidth());
-                weapon2.setY(player.getY()+20);
-                weapon3.setX(player.getX());
-                weapon3.setY(player.getY()+20);
-                playerWeapons.add(weapon);
-                playerWeapons.add(weapon2);
-                playerWeapons.add(weapon3);
-                time = 0;
-            }
+                player.shoot();
+
 
         }
         if (activeKeys.contains(KeyCode.ESCAPE)){
@@ -263,6 +251,13 @@ public class GameScene extends GeneralScene implements GameConstants {
         while (aliveBullets.hasNext()){
             if (!aliveBullets.next().isAlive()){
                 aliveBullets.remove();
+            }
+        }
+
+        ListIterator<FeatureDrop> drops = featuresDrop.listIterator();
+        while (drops.hasNext()){
+            if (!drops.next().isAlive()){
+                drops.remove();
             }
         }
     }

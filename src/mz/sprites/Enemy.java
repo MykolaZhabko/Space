@@ -125,7 +125,7 @@ public class Enemy extends GeneralSprite implements GameConstants {
     }
 
     public void shoot(){
-            Weapon weapon = new Weapon(1,5);
+            Weapon weapon = new Weapon(1,10);
 
             weapon.setX(this.getX() + (int)getSprite().getWidth()/2);
             weapon.setY(this.getY() + (int)getSprite().getHeight()/2);

@@ -1,7 +1,6 @@
 package mz.sprites;
 
 import javafx.scene.canvas.GraphicsContext;
-import javafx.scene.image.Image;
 import mz.periferals.GameConstants;
 import mz.scenes.GameScene;
 
