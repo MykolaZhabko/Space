@@ -10,9 +10,6 @@ public abstract class GeneralSprite{
     private boolean isAlive = true;
     private Image sprite;
 
-    public GeneralSprite() {
-
-    }
 
     public int getX() {
         return x;
@@ -45,5 +42,4 @@ public abstract class GeneralSprite{
         this.sprite = sprite;
     }
     public abstract void draw(GraphicsContext gc);
-
 }

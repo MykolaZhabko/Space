@@ -27,21 +27,32 @@ public class Enemy extends GeneralSprite implements GameConstants {
 
 
     public Enemy(int type) {
-        setHp(20);
-        setSprite(enemy);
-        setPoints(10);
+        switch (type){
+            case 1:
+                setHp(20);
+                setSprite(enemy);
+                setPoints(10);
+                explosion = new Explosion(getX(),getY(),0);
+                break;
+            case 2:
+                setHp(60);
+                setSprite(enemy2);
+                setPoints(25);
+                explosion = new Explosion(getX(),getY(),0);
+                break;
+        }
         initialHP = (int) this.getHp();
         setType(type);
         setTimer(0);
         setShootTimer(0);
         setOnBattleField(false);
-        explosion = new Explosion(getX(),getY(),0);
     }
 
     @Override
     public void draw(GraphicsContext gc) {
         if (isAlive()) {
             gc.setStroke(Color.GREEN);
+            gc.setLineWidth(3);
             gc.strokeLine(getX(), getY() - 2, getX() + getSprite().getWidth() * (getHp() / initialHP), getY() - 2);
             gc.drawImage(getSprite(), getX(), getY());
             explosion.setX(getX());
@@ -61,6 +72,39 @@ public class Enemy extends GeneralSprite implements GameConstants {
             if (isOnBattleField()) {
                 switch (getType()) {
                     case 1:
+                        if (getTimer() > 2) {
+                            setDirection(getRandom(ALL_DIRRECTION));
+                            setTimer(0);
+                        }
+                        switch (getDirection()) {
+                            case 0:
+                                setX(getX() - 1);
+                                setY(getY() + 1);
+                                break;
+                            case 1:
+                                setX(getX() - 2);
+                                break;
+                            case 2:
+                                setX(getX() - 1);
+                                setY(getY() - 1);
+                                break;
+                            case 3:
+                                setX(getX() + 1);
+                                setY(getY() - 1);
+
+                            case 4:
+                                setX(getX() + 2);
+                                break;
+                            case 5:
+                                setX(getX() + 1);
+                                setY(getY() + 1);
+                                break;
+                            default:
+                                break;
+                        }
+                        navigation(getX(), getY());
+                        break;
+                    case 2:
                         if (getTimer() > 2) {
                             setDirection(getRandom(ALL_DIRRECTION));
                             setTimer(0);
@@ -125,13 +169,23 @@ public class Enemy extends GeneralSprite implements GameConstants {
     }
 
     public void shoot(){
-            Weapon weapon = new Weapon(1,10);
-
-            weapon.setX(this.getX() + (int)getSprite().getWidth()/2);
-            weapon.setY(this.getY() + (int)getSprite().getHeight()/2);
-
-            GameScene.enemyWeapons.add(weapon);
-            GameScene.soundManager.playSound("laser2");
+        Weapon weapon;
+        switch (getType()) {
+            case 1:
+                weapon = new Weapon(1, 10);
+                weapon.setX(this.getX() + (int) getSprite().getWidth() / 2);
+                weapon.setY(this.getY() + (int) getSprite().getHeight() / 2);
+                GameScene.enemyWeapons.add(weapon);
+                GameScene.soundManager.playSound("laser2");
+                break;
+            case 2:
+                weapon = new Weapon(1, 10);
+                weapon.setX(this.getX() + (int) getSprite().getWidth() / 2);
+                weapon.setY(this.getY() + (int) getSprite().getHeight() / 2);
+                GameScene.enemyWeapons.add(weapon);
+                GameScene.soundManager.playSound("laser2");
+                break;
+        }
     }
 
     public int getType() {

@@ -1,7 +1,6 @@
 package mz.sprites;
 
 import javafx.scene.canvas.GraphicsContext;
-import javafx.scene.image.Image;
 import javafx.scene.paint.Color;
 import mz.periferals.GameConstants;
 
@@ -28,7 +27,7 @@ public class Player extends GeneralSprite implements GameConstants {
         maxY = GAME_HEIGHT - (int)getSprite().getHeight();
         explosion = new Explosion(getX(),getY(),1);
         setScore(0);
-        setLives(3);
+        setLives(0);
         setAmmoType(0);
         setTimeCount(0);
     }
@@ -38,7 +37,6 @@ public class Player extends GeneralSprite implements GameConstants {
         setTimeCount(getTimeCount()+0.016);
         if (isAlive()) {
             gc.setFill(Color.GREEN);
-            gc.strokeLine(getX(), getY()+getSprite().getHeight() +  2, getX() + getSprite().getWidth() * (getHp() / initialHP), getY()+getSprite().getHeight() + 2);
             gc.drawImage(getSprite(), getX(), getY());
             explosion.setX(getX());
             explosion.setY(getY());
@@ -99,12 +97,16 @@ public class Player extends GeneralSprite implements GameConstants {
         this.timeCount = timeCount;
     }
 
+    public Explosion getExplosion() {
+        return explosion;
+    }
+
     public void shoot(){
         switch (getAmmoType()){
             case 0:
-                if(getTimeCount() > 0.3 && isAlive()) {
+                if(getTimeCount() > 0.2 && isAlive()) {
                     soundManager.playSound("laser1");
-                    Weapon weapon = new Weapon(0, 10);
+                    Weapon weapon = new Weapon(0, 7);
                     weapon.setX(getX() + (int) getSprite().getWidth() / 2);
                     weapon.setY(getY());
                     playerWeapons.add(weapon);
@@ -114,10 +116,9 @@ public class Player extends GeneralSprite implements GameConstants {
             case 1:
                 if(getTimeCount() > 0.2 && isAlive()) {
                     soundManager.playSound("laser1");
-                    Weapon weapon1 = new Weapon(0, 10);
-                    Weapon weapon2 = new Weapon(0, 10);
-                    Weapon weapon3 = new Weapon(0, 10);
-
+                    Weapon weapon1 = new Weapon(0, 5);
+                    Weapon weapon2 = new Weapon(0, 5);
+                    Weapon weapon3 = new Weapon(0, 5);
                     weapon1.setX(getX() + (int) getSprite().getWidth() / 2 - (int) weapon1.getSprite().getWidth() / 2);
                     weapon1.setY(getY());
                     weapon2.setX(getX() + (int) getSprite().getWidth() - (int) weapon1.getSprite().getWidth() / 2);
@@ -131,7 +132,5 @@ public class Player extends GeneralSprite implements GameConstants {
                 }
                 break;
         }
-
-//
     }
 }

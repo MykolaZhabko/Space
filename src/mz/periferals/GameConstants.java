@@ -13,6 +13,7 @@ public interface GameConstants {
     Image explosion3 = new Image("Explosions/explosion 3.png");
     Image explosion4 = new Image("Explosions/explosion 4.png");
     Image enemy = new Image("Enemies/Spaceship-Drakir1.png",42, 39, true, true);
+    Image enemy2 = new Image("Enemies/Spaceship-Drakir2.png",58,58,true,true);
     Image player = new Image("SpaceShip.png",50,73,true,true);
 
     Image enemyWeapon = new Image("Enemies/weapon/laserEnemy1.png",8,20,true,true);

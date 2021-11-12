@@ -26,8 +26,6 @@ public class Weapon extends GeneralSprite implements GameConstants {
         gc.drawImage(getSprite(),getX(),getY());
 
     }
-
-    // 1 = down , -1 = up
     public void moveUp(){
         setY(getY() - 17);
         if (getY() < 0) this.setAlive(false);
@@ -36,7 +34,6 @@ public class Weapon extends GeneralSprite implements GameConstants {
         setY(getY() + 10);
         if (getY() > GameScene.GAME_HEIGHT) this.setAlive(false);
     }
-
     public int getDamage() {
         return damage;
     }

@@ -15,8 +15,14 @@ import mz.sprites.*;
 import java.util.*;
 
 public class GameScene extends GeneralScene implements GameConstants {
-    public static Player player;
+    private Player player;
     private Level1 bgL1;
+    private boolean gameOver;
+
+    public static long start;
+    public static long finish;
+    public static long timeElapsed;
+
     private ArrayList<Enemy> enemies;
     public static SoundManager soundManager;
 
@@ -25,20 +31,20 @@ public class GameScene extends GeneralScene implements GameConstants {
     public static ArrayList<FeatureDrop> featuresDrop;
 
 
-    private double time = 0;
+
     private double enemyTime = 0;
 
-    public GameScene() throws InterruptedException {
+    public GameScene() {
         player = new Player();
         bgL1 = new Level1("Space_bg.png");
 
-        soundManager = new SoundManager(5);
+        soundManager = new SoundManager(2);
         soundManager.loadSoundEffects("laser1", "accets/Sounds/weaponfire6.wav");
         soundManager.loadSoundEffects("laser2","accets/Sounds/laser6.wav");
         soundManager.loadSoundEffects("explosion","accets/Sounds/explosion4.wav");
         soundManager.loadSoundEffects("explosionFighter","accets/Sounds/explosion2.wav");
 
-
+        setGameOver(false);
         enemies = new ArrayList<>();
         playerWeapons = new ArrayList<>();
         enemyWeapons = new ArrayList<>();
@@ -46,6 +52,38 @@ public class GameScene extends GeneralScene implements GameConstants {
 
         setFill(Color.BLACK);
 
+    }
+
+    public static long getTimeElapsed() {
+        return timeElapsed;
+    }
+
+    public static void setTimeElapsed(long timeElapsed) {
+        GameScene.timeElapsed = timeElapsed;
+    }
+
+    public static long getStart() {
+        return start;
+    }
+
+    public static void setStart(long start) {
+        GameScene.start = start;
+    }
+
+    public static long getFinish() {
+        return finish;
+    }
+
+    public static void setFinish(long finish) {
+        GameScene.finish = finish;
+    }
+
+    public boolean isGameOver() {
+        return gameOver;
+    }
+
+    public void setGameOver(boolean gameOver) {
+        this.gameOver = gameOver;
     }
 
     public void generateEnemies(){
@@ -56,33 +94,63 @@ public class GameScene extends GeneralScene implements GameConstants {
             newEnemy.setX((int) Math.round(Math.random()*(GAME_WIDTH - (int)newEnemy.getSprite().getWidth())));
             enemies.add(newEnemy);
             enemyTime=0;
+            if (player.getScore() > 100 && getRandom(2) == 1){
+                Enemy newEnemy2 = new Enemy(2);
+                newEnemy2.setY(0-(int)newEnemy.getSprite().getHeight());
+                newEnemy2.setX((int) Math.round(Math.random()*(GAME_WIDTH - (int)newEnemy.getSprite().getWidth())));
+                enemies.add(newEnemy2);
+            }
         }
     }
 
 
 
     @Override
-    public void draw() { 
+    public void draw() {
+        setStart(System.currentTimeMillis());
         activeKeys.clear();
         new AnimationTimer() {
             @Override
             public void handle(long now) {
                 drawUI();
-                time += 0.016;
-                bgL1.draw(gc);
-
-                showDevInfo();
-
-                player.draw(gc);
-                generateEnemies();
-                drawEnemies(gc);
-                drawBullets(gc);
-                drawFeaturesDrop();
-                removeDead();
-                keyPressHandler(this);
-                collisionDetect();
+                if(player.isAlive() || player.getLives() > 0 || player.getExplosion().isAlive()) {
+                    bgL1.draw(gc);
+                    //showDevInfo();
+                    player.draw(gc);
+                    generateEnemies();
+                    drawEnemies(gc);
+                    drawBullets(gc);
+                    drawFeaturesDrop();
+                    removeDead();
+                    keyPressHandler(this);
+                    collisionDetect();
+                }else {
+                    if(!isGameOver()) {
+                        setGameOver(true);
+                        setFinish(System.currentTimeMillis());
+                        setTimeElapsed(getStart()-getFinish());
+                    }
+                    drawGameOver();
+                    keyPressHandler(this);
+                }
             }
         }.start();
+    }
+
+    private void drawGameOver() {
+        Font font = Font.font("Arial",FontWeight.NORMAL,24);
+        gc.setFont(font);
+        gc.setFill(Color.RED);
+        gc.fillText("GAME OVER",GAME_WIDTH/2 -240,GAME_HEIGHT/2);
+        gc.setFill(Color.WHITE);
+        gc.fillText("TIME: " + (getTimeElapsed() * (-1) / 1000) + " seconds",GAME_WIDTH/2 -240,GAME_HEIGHT/2 + 24);
+        gc.fillText("SCORE: " + player.getScore(),GAME_WIDTH/2 -240,GAME_HEIGHT/2 + 48);
+
+        font = Font.font("Arial",FontWeight.NORMAL,12);
+        gc.setFont(font);
+        gc.setFill(Color.LAVENDERBLUSH);
+        gc.fillText("To restart the game press SPACE.... ",GAME_WIDTH/2 -240,GAME_HEIGHT/2 + 96);
+
     }
 
     private void drawUI() {
@@ -95,7 +163,12 @@ public class GameScene extends GeneralScene implements GameConstants {
         gcUi.setFill(Color.WHITE);
         String score = "SCORE: " + player.getScore();
         gcUi.fillText(score, 0,24);
-
+        font = Font.font("Arial", FontWeight.NORMAL,12);
+        gcUi.setFont(font);
+        gcUi.fillText("Player HP: " + player.getHp(), 50,UI_HEIGHT);
+        gcUi.setStroke(Color.GREEN);
+        gcUi.setLineWidth(20);
+        gcUi.strokeLine(50, UI_HEIGHT-20, Math.max((UI_WIDTH-50)  * (player.getHp() / 100),50), UI_HEIGHT-20);
     }
 
 
@@ -117,8 +190,8 @@ public class GameScene extends GeneralScene implements GameConstants {
                         if (enemy.getHp() <= 0) {
                             if (enemy.isAlive()) {
                                 soundManager.playSound("explosion");
-                                if (getRandom(2) == 1)
-                                featuresDrop.add(new FeatureDrop(enemy.getX(), enemy.getY(), getRandom(4)));
+                                if (getRandom(3) == 1)
+                                featuresDrop.add(new FeatureDrop(enemy.getX(), enemy.getY(), getRandom(2)));
                                 enemy.setAlive(false);
                                 player.setScore(player.getScore()+((Enemy) enemy).getPoints());
                             }
@@ -192,7 +265,6 @@ public class GameScene extends GeneralScene implements GameConstants {
         gc.fillText(info, 0,12);
         String bulletList = "Bullet list size:  " + playerWeapons.size();
         gc.fillText(bulletList, 0,24);
-        gc.fillText("Player HP: " + player.getHp(), 0,GAME_HEIGHT-12);
         gc.fillText("Feature list: " + featuresDrop.size(), 0,36);
 
 
@@ -218,10 +290,17 @@ public class GameScene extends GeneralScene implements GameConstants {
             player.move(5,0);
         }
         if (activeKeys.contains(KeyCode.SPACE)){
-
-
+            if (!isGameOver()) {
                 player.shoot();
-
+            } else {
+                player = new Player();
+                enemies = new ArrayList<>();
+                playerWeapons = new ArrayList<>();
+                enemyWeapons = new ArrayList<>();
+                featuresDrop = new ArrayList<>();
+                setGameOver(false);
+                setStart(System.currentTimeMillis());
+            }
 
         }
         if (activeKeys.contains(KeyCode.ESCAPE)){
