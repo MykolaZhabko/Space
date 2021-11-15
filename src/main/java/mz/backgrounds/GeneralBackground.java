@@ -33,7 +33,7 @@ public class GeneralBackground extends Image {
     public void draw(GraphicsContext gc){
         gc.drawImage(this,x,y, GameScene.GAME_WIDTH,GameScene.GAME_HEIGHT);
         gc.drawImage(this,x,y - GameScene.GAME_HEIGHT,GameScene.GAME_WIDTH, GameScene.GAME_HEIGHT);
-            setY(getY() + 0.3);
+            setY(getY() + 5);
             if (getY() > GameScene.GAME_HEIGHT) setY(0);
     }
 }

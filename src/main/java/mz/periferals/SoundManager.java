@@ -16,6 +16,10 @@ public class SoundManager implements Serializable {
 
     public SoundManager(int numberOfThreads){
         soundPool = Executors.newFixedThreadPool(numberOfThreads);
+        loadSoundEffects("laser1", "accets/Sounds/weaponfire6.wav");
+        loadSoundEffects("laser2","accets/Sounds/laser6.wav");
+        loadSoundEffects("explosion","accets/Sounds/explosion4.wav");
+        loadSoundEffects("explosionFighter","accets/Sounds/explosion2.wav");
     }
 
     public void loadSoundEffects(String id, String url){

@@ -10,10 +10,11 @@ public interface GameConstants {
     int UI_WIDTH = 700;
     int UI_HEIGHT = 900;
     Image UI = new Image("UIBACK.png",700,900,false,true);
+    Image explosion1 = new Image("Explosions/explosion 1.png");
     Image explosion3 = new Image("Explosions/explosion 3.png");
     Image explosion4 = new Image("Explosions/explosion 4.png");
-    Image enemy = new Image("Enemies/Spaceship-Drakir1.png",42, 39, true, true);
-    Image enemy2 = new Image("Enemies/Spaceship-Drakir2.png",58,58,true,true);
+    Image enemy = new Image("Enemies/Spaceship-Drakir1.png",32, 29, true, true);
+    Image enemy2 = new Image("Enemies/Spaceship-Drakir2.png",48,48,true,true);
     Image player = new Image("SpaceShip.png",50,73,true,true);
 
     Image enemyWeapon = new Image("Enemies/weapon/laserEnemy1.png",8,20,true,true);

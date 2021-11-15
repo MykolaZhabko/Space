@@ -23,9 +23,9 @@ public class MenuItem extends Pane implements Serializable {
     public MenuItem(String name) {
         Polygon bg = new Polygon(
                 0, 0,
-                200, 0,
-                215, 15,
-                200, 30,
+                430, 0,
+                415, 15,
+                400, 30,
                 0, 30
         );
         bg.setStroke(Color.color(1, 1, 1, 0.75));

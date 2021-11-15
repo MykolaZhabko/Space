@@ -11,8 +11,13 @@ import mz.game.Game;
 import mz.periferals.GameConstants;
 import mz.periferals.SoundManager;
 import mz.sprites.*;
+import org.json.simple.JSONArray;
+import org.json.simple.JSONObject;
+import org.json.simple.parser.JSONParser;
+import org.json.simple.parser.ParseException;
 
-import java.io.Serializable;
+import java.io.*;
+import java.net.URL;
 import java.util.*;
 
 public class GameScene extends GeneralScene implements GameConstants, Serializable {
@@ -42,10 +47,6 @@ public class GameScene extends GeneralScene implements GameConstants, Serializab
         bgL1 = new Level1("Space_bg.png");
 
         soundManager = new SoundManager(2);
-        soundManager.loadSoundEffects("laser1", "accets/Sounds/weaponfire6.wav");
-        soundManager.loadSoundEffects("laser2","accets/Sounds/laser6.wav");
-        soundManager.loadSoundEffects("explosion","accets/Sounds/explosion4.wav");
-        soundManager.loadSoundEffects("explosionFighter","accets/Sounds/explosion2.wav");
 
         setGameOver(false);
         setPause(false);
@@ -144,12 +145,48 @@ public class GameScene extends GeneralScene implements GameConstants, Serializab
                         setGameOver(true);
                         setFinish(System.currentTimeMillis());
                         setTimeElapsed(getStart()-getFinish());
+                        writeToArchive();
                     }
                     drawGameOver();
                     keyPressHandler(this);
                 }
             }
         }.start();
+    }
+
+    private void writeToArchive() {
+        //creating a jason object using maven dep.-> check pom.xml
+        JSONParser jsonParser = new JSONParser();
+
+        JSONObject jobj = new JSONObject();
+        jobj.put("date",new Date().toString());
+        jobj.put("score",player.getScore());
+        jobj.put("time",getTimeElapsed());
+
+        try (FileReader reader = new FileReader("arch.json"))
+        {
+            //Read JSON file
+            Object obj = jsonParser.parse(reader);
+
+            JSONArray arch = (JSONArray) obj;
+            System.out.println(arch);
+
+
+        } catch (FileNotFoundException e) {
+            try {
+                FileWriter fileWriter = new FileWriter("arch.json",true);
+                fileWriter.append(jobj.toString());
+                fileWriter.close();
+            } catch (IOException ex) {
+                ex.printStackTrace();
+            }
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+
     }
 
     private void drawGameOver() {
@@ -160,7 +197,6 @@ public class GameScene extends GeneralScene implements GameConstants, Serializab
         gc.setFill(Color.WHITE);
         gc.fillText("TIME: " + (getTimeElapsed() * (-1) / 1000) + " seconds",GAME_WIDTH/2 -240,GAME_HEIGHT/2 + 24);
         gc.fillText("SCORE: " + player.getScore(),GAME_WIDTH/2 -240,GAME_HEIGHT/2 + 48);
-
         font = Font.font("Arial",FontWeight.NORMAL,12);
         gc.setFont(font);
         gc.setFill(Color.LAVENDERBLUSH);

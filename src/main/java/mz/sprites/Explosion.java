@@ -29,6 +29,9 @@ public class Explosion implements GameConstants, Serializable {
             case 1:
                 localExplocion = explosion4;
                 break;
+            case 2:
+                localExplocion = explosion1;
+                break;
         }
     }
 
@@ -42,8 +45,7 @@ public class Explosion implements GameConstants, Serializable {
                 setSx(0);
                 setSy(0);
                 setAlive(false);
-            }
-            if (getSx() == 7) {
+            }else if (getSx() == 7) {
                 setSx(0);
                 setSy(getSy() + 1);
             }

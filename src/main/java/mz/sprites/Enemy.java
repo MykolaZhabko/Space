@@ -31,7 +31,7 @@ public class Enemy extends GeneralSprite implements GameConstants, Serializable 
                 setHp(20);
                 setSprite(enemy);
                 setPoints(10);
-                explosion = new Explosion(getX(), getY(), 0);
+                explosion = new Explosion(getX(), getY(), 2);
                 break;
             case 2:
                 setHp(60);

@@ -24,15 +24,16 @@ public class MenuScene extends GeneralScene implements Serializable {
     private Line line;
     private VBox menuBox = new VBox(-5);
     private List<Pair<String, Runnable>> menuData = Arrays.asList(
-            new Pair<String, Runnable>("Start", () -> {
+            new Pair<String, Runnable>("START", () -> {
                 Game.setScene(0);
 
             }),
-            new Pair<String, Runnable>("Game options", () -> {
+            new Pair<String, Runnable>("ARCHIVES", () -> {
+                Game.setScene(2);
             }),
-            new Pair<String, Runnable>("About", () -> {
+            new Pair<String, Runnable>("ABOUT", () -> {
             }),
-            new Pair<String, Runnable>("Exit", () -> {
+            new Pair<String, Runnable>("EXIT", () -> {
                 Game.exit();
             })
     );
@@ -76,8 +77,8 @@ public class MenuScene extends GeneralScene implements Serializable {
         line.setStrokeWidth(3);
         line.setStroke(Color.color(1, 1, 1, 0.75));
         line.setEffect(new DropShadow(5, Color.BLACK));
-        line.setTranslateY(-40);
-        line.setTranslateX(-200);
+        line.setTranslateY(-45);
+        line.setTranslateX(-210);
         line.setScaleY(0);
 
         getGeneralRoot().getChildren().add(line);
@@ -105,9 +106,9 @@ public class MenuScene extends GeneralScene implements Serializable {
         menuData.forEach(data -> {
             MenuItem item = new MenuItem(data.getKey());
             item.setOnAction(data.getValue());
-            item.setTranslateX(-300);
+            item.setTranslateX(-500);
 
-            Rectangle clip = new Rectangle(300, 30);
+            Rectangle clip = new Rectangle(500, 30);
             clip.translateXProperty().bind(item.translateXProperty().negate());
 
             item.setClip(clip);

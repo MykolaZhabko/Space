@@ -2,6 +2,7 @@ package mz.game;
 
 import javafx.application.Application;
 import javafx.stage.Stage;
+import mz.scenes.ArchivesScene;
 import mz.scenes.GameScene;
 import mz.scenes.GeneralScene;
 import mz.scenes.MenuScene;
@@ -19,8 +20,6 @@ public class Game extends Application implements Serializable {
         root.setTitle("SPACE");
         root.setResizable(false);
         root.show();
-
-
     }
 
     public static void setScene(int numScene){
@@ -33,6 +32,11 @@ public class Game extends Application implements Serializable {
                 break;
             case 1:
                 scene = new MenuScene();
+                root.setScene(scene);
+                scene.draw();
+                break;
+            case 2:
+                scene = new ArchivesScene();
                 root.setScene(scene);
                 scene.draw();
                 break;
