@@ -17,12 +17,11 @@ import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
 
 import java.io.*;
-import java.net.URL;
 import java.util.*;
 
 public class GameScene extends GeneralScene implements GameConstants, Serializable {
     private Player player;
-    private Level1 bgL1;
+    private final Level1 bgL1;
     private boolean gameOver;
     private boolean pause;
 
@@ -103,13 +102,13 @@ public class GameScene extends GeneralScene implements GameConstants, Serializab
         enemyTime += 0.02;
         if (enemyTime > 2 && enemies.size() < 6) {
             Enemy newEnemy = new Enemy(1);
-            newEnemy.setY(0-(int)newEnemy.getSprite().getHeight());
+            newEnemy.setY(-(int)newEnemy.getSprite().getHeight());
             newEnemy.setX((int) Math.round(Math.random()*(GAME_WIDTH - (int)newEnemy.getSprite().getWidth())));
             enemies.add(newEnemy);
             enemyTime=0;
             if (player.getScore() > 100 && getRandom(2) == 1){
                 Enemy newEnemy2 = new Enemy(2);
-                newEnemy2.setY(0-(int)newEnemy.getSprite().getHeight());
+                newEnemy2.setY(-(int)newEnemy.getSprite().getHeight());
                 newEnemy2.setX((int) Math.round(Math.random()*(GAME_WIDTH - (int)newEnemy.getSprite().getWidth())));
                 enemies.add(newEnemy2);
             }
@@ -155,38 +154,56 @@ public class GameScene extends GeneralScene implements GameConstants, Serializab
     }
 
     private void writeToArchive() {
-        //creating a jason object using maven dep.-> check pom.xml
-        JSONParser jsonParser = new JSONParser();
+        //gameplay time formatting
+        long milliseconds = Math.abs(getTimeElapsed());
+        int seconds = (int) (milliseconds / 1000) % 60 ;
+        int minutes = (int) ((milliseconds / (1000*60)) % 60);
+        int hours   = (int) ((milliseconds / (1000*60*60)) % 24);
 
         JSONObject jobj = new JSONObject();
         jobj.put("date",new Date().toString());
         jobj.put("score",player.getScore());
-        jobj.put("time",getTimeElapsed());
+        jobj.put("time",String.format("%d h %d min %d sec", hours,minutes,seconds));
+        JSONArray jsonArray = new JSONArray();
+        jsonArray.add(jobj);
 
-        try (FileReader reader = new FileReader("arch.json"))
-        {
-            //Read JSON file
-            Object obj = jsonParser.parse(reader);
-
-            JSONArray arch = (JSONArray) obj;
-            System.out.println(arch);
-
-
-        } catch (FileNotFoundException e) {
+        File archive = new File("spaceGame");
+        if(archive.mkdir()){
+           //Creating the file
             try {
-                FileWriter fileWriter = new FileWriter("arch.json",true);
-                fileWriter.append(jobj.toString());
-                fileWriter.close();
-            } catch (IOException ex) {
-                ex.printStackTrace();
+                FileWriter fwr = new FileWriter("spaceGame/arch.json", false);
+                fwr.write(jsonArray.toJSONString());
+                fwr.close();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        } else{
+            //File was created already
+            JSONParser parser = new JSONParser();
+            try {
+                Object obj = parser.parse(new FileReader("spaceGame/arch.json"));
+                JSONArray readFileJsonObj =(JSONArray) obj;
+                readFileJsonObj.add(jobj);
+                FileWriter fwr = new FileWriter("spaceGame/arch.json", false);
+                fwr.write(readFileJsonObj.toJSONString());
+                fwr.close();
+            } catch (IOException e) {
+                e.printStackTrace();
+            } catch (ParseException e) {
+                e.printStackTrace();
+                //in case file was created and empty due to unknown reason
+                FileWriter fwr = null;
+                try {
+                    fwr = new FileWriter("spaceGame/arch.json", false);
+                    fwr.write(jsonArray.toJSONString());
+                    fwr.close();
+                } catch (IOException ex) {
+                    ex.printStackTrace();
+                }
+
             }
 
-        } catch (IOException e) {
-            e.printStackTrace();
-        } catch (ParseException e) {
-            e.printStackTrace();
         }
-
     }
 
     private void drawGameOver() {
