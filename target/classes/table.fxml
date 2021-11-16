@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.TableColumn?>
+<?import javafx.scene.control.TableView?>
+<?import javafx.scene.layout.BorderPane?>
+
+<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="900.0" prefWidth="700.0" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" fx:controller="mz.periferals.Controller">
+   <center>
+      <TableView fx:id="table_info" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="537.0" prefWidth="612.0" BorderPane.alignment="CENTER">
+        <columns>
+          <TableColumn fx:id="col_date" prefWidth="235.0" text="DATE" />
+          <TableColumn fx:id="col_score" prefWidth="104.0" text="SCORE" />
+            <TableColumn fx:id="col_time" prefWidth="292.0" text="TIME PLAYED" />
+        </columns>
+         <BorderPane.margin>
+            <Insets top="250.0" />
+         </BorderPane.margin>
+      </TableView>
+   </center>
+</BorderPane>
