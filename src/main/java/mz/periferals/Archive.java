@@ -3,7 +3,7 @@ package mz.periferals;
 public class Archive {
     private String date, time, score;
 
-    public Archive(String date, String time, String score) {
+    public Archive(String date, String score, String time) {
         this.date = date;
         this.time = time;
         this.score = score;

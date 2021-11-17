@@ -68,7 +68,7 @@ public class MenuScene extends GeneralScene implements Serializable {
     private void addTitle() {
         Title title = new Title("VAMK SPACE");
         title.setTranslateX(UI_WIDTH / 2 - title.getTitleWidth() / 2);
-        title.setTranslateY(UI_HEIGHT / 4);
+        title.setTranslateY(UI_HEIGHT / 8);
         getGeneralRoot().getChildren().add(title);
     }
 

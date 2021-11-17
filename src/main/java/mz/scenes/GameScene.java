@@ -1,6 +1,7 @@
 package mz.scenes;
 
 import javafx.animation.AnimationTimer;
+import javafx.collections.ObservableList;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.input.KeyCode;
 import javafx.scene.paint.Color;
@@ -8,6 +9,7 @@ import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
 import mz.backgrounds.Level1;
 import mz.game.Game;
+import mz.periferals.Archive;
 import mz.periferals.GameConstants;
 import mz.periferals.SoundManager;
 import mz.sprites.*;
