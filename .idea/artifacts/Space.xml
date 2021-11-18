@@ -1,0 +1,13 @@
+<component name="ArtifactManager">
+  <artifact type="javafx" name="Space">
+    <output-path>$PROJECT_DIR$/out/artifacts/Space</output-path>
+    <root id="root">
+      <element id="archive" name="Space.jar">
+        <element id="module-output" name="Space" />
+      </element>
+      <element id="library" level="project" name="Maven: com.googlecode.json-simple:json-simple:1.1.1" />
+      <element id="library" level="project" name="Maven: org.hamcrest:hamcrest-core:1.1" />
+      <element id="library" level="project" name="Maven: junit:junit:4.10" />
+    </root>
+  </artifact>
+</component>
