@@ -45,6 +45,7 @@ public class ArchivesScene extends GeneralScene implements Serializable {
         try {
             System.out.println("HERE");
             root = FXMLLoader.load(getClass().getClassLoader().getResource("table.fxml"));
+            //this.getStylesheets().add(getClass().getClassLoader().getResource("table.css").toExternalForm());
             System.out.println(root);
         } catch (IOException e) {
             e.printStackTrace();

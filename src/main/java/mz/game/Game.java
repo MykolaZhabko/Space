@@ -2,10 +2,7 @@ package mz.game;
 
 import javafx.application.Application;
 import javafx.stage.Stage;
-import mz.scenes.ArchivesScene;
-import mz.scenes.GameScene;
-import mz.scenes.GeneralScene;
-import mz.scenes.MenuScene;
+import mz.scenes.*;
 
 import java.io.Serializable;
 
@@ -37,6 +34,11 @@ public class Game extends Application implements Serializable {
                 break;
             case 2:
                 scene = new ArchivesScene();
+                root.setScene(scene);
+                scene.draw();
+                break;
+            case 3:
+                scene = new AboutScene();
                 root.setScene(scene);
                 scene.draw();
                 break;

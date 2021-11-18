@@ -32,6 +32,7 @@ public class MenuScene extends GeneralScene implements Serializable {
                 Game.setScene(2);
             }),
             new Pair<String, Runnable>("ABOUT", () -> {
+                Game.setScene(3);
             }),
             new Pair<String, Runnable>("EXIT", () -> {
                 Game.exit();

@@ -23,9 +23,7 @@ public class SoundManager implements Serializable {
     }
 
     public void loadSoundEffects(String id, String url){
-        System.out.println("Here!!");
         AudioClip sound = new AudioClip(Paths.get(url).toUri().toString());
-        System.out.println("Sound = " );
         soundEffectsMap.put(id,sound);
     }
 
