@@ -9,6 +9,12 @@ public interface GameConstants {
     int GAME_HEIGHT = 800;
     int UI_WIDTH = 700;
     int UI_HEIGHT = 900;
+
+    final int MENU_SCENE = 1;
+    final int GAME_SCENE = 0;
+    final int ARCHIVE_SCENE = 2;
+    final int ABOUT_SCENE = 3;
+
     Image UI = new Image("UIBACK.png",700,900,false,true);
     Image explosion1 = new Image("Explosions/explosion 1.png");
     Image explosion3 = new Image("Explosions/explosion 3.png");

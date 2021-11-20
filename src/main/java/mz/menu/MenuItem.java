@@ -14,12 +14,19 @@ import javafx.scene.text.Text;
 
 import java.io.Serializable;
 
+/**
+ * Class defines the menu Item.
+ * The style settings are inside the constructor
+ */
 public class MenuItem extends Pane implements Serializable {
     private Text text;
-
     private Effect shadow = new DropShadow(5, Color.BLACK);
     private Effect blur = new BoxBlur(1, 1, 3);
 
+    /**
+     * Constructor requires descriptive string name of the menu item.
+     * @param name - mebu item name ('OPTIONS','START GAME'... etc)
+     */
     public MenuItem(String name) {
         Polygon bg = new Polygon(
                 0, 0,
@@ -51,6 +58,10 @@ public class MenuItem extends Pane implements Serializable {
         getChildren().addAll(bg,text);
     }
 
+    /**
+     *
+     * @param action
+     */
     public void setOnAction(Runnable action){
         setOnMouseClicked(e -> action.run());
     }
