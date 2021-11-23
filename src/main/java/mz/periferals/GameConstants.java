@@ -1,8 +1,10 @@
 package mz.periferals;
 
-
 import javafx.scene.image.Image;
-import mz.sprites.Weapon;
+
+/**
+ * This interface is used as a constants container for whole game.
+ */
 
 public interface GameConstants {
     int GAME_WIDTH = 600;
@@ -10,10 +12,10 @@ public interface GameConstants {
     int UI_WIDTH = 700;
     int UI_HEIGHT = 900;
 
-    final int MENU_SCENE = 1;
-    final int GAME_SCENE = 0;
-    final int ARCHIVE_SCENE = 2;
-    final int ABOUT_SCENE = 3;
+    int MENU_SCENE = 1;
+    int GAME_SCENE = 0;
+    int ARCHIVE_SCENE = 2;
+    int ABOUT_SCENE = 3;
 
     Image UI = new Image("UIBACK.png",700,900,false,true);
     Image explosion1 = new Image("Explosions/explosion 1.png");

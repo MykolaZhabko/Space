@@ -5,13 +5,10 @@ import javafx.stage.Stage;
 import mz.periferals.GameConstants;
 import mz.scenes.*;
 
-import java.io.Serializable;
-
 /**
  * Main class for the game
  */
-public class Game extends Application implements Serializable, GameConstants {
-
+public class Game extends Application implements GameConstants {
     private static Stage root;
 
     @Override

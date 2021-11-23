@@ -7,32 +7,36 @@ import javafx.scene.image.ImageView;
 import mz.menu.Title;
 import java.io.IOException;
 
+/**
+ * This is an informative scene. Contains the information about project.
+ * Loaded from FXML.
+ */
 public class AboutScene extends GeneralScene{
-
     Parent root = null;
-
     public AboutScene(){
         super();
-
     }
 
+    /**
+     * Initialise/Draws actual scene to the screen
+     */
     @Override
     public void draw() {
         addBackground();
         try {
             System.out.println("HERE");
             root = FXMLLoader.load(getClass().getClassLoader().getResource("about.fxml"));
-            //this.getStylesheets().add(getClass().getClassLoader().getResource("table.css").toExternalForm());
             System.out.println(root);
         } catch (IOException e) {
             e.printStackTrace();
         }
         addTitle();
-        // addMenu(UI_WIDTH / 2 - 200, UI_HEIGHT / 6);
         getGeneralRoot().getChildren().add(root);
-        //addTable();
     }
 
+    /**
+     * Adds title to the scene
+     */
     private void addTitle() {
         Title title = new Title("ABOUT");
         title.setTranslateX(UI_WIDTH / 2 - title.getTitleWidth() / 2);
@@ -40,10 +44,12 @@ public class AboutScene extends GeneralScene{
         getGeneralRoot().getChildren().add(title);
     }
 
+    /**
+     * Adds background to the scene
+     */
     private void addBackground() {
         ImageView imageView = new ImageView(new Image("UIBACK.png"));
         imageView.setFitWidth(UI_WIDTH);
-
         getGeneralRoot().getChildren().add(imageView);
     }
 

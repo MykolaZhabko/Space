@@ -1,5 +1,14 @@
 package mz.periferals;
 
+
+/**
+ * This class is used for Observable list which is used for
+ * generating the TableView content.
+ * (I am using JSON-Simple maven dependency and the result of the
+ * played game is saved in json file under /spaceGame/arch.json)
+ * Getters and Setter should be present
+ */
+
 public class Archive {
     private String date, time, score;
 

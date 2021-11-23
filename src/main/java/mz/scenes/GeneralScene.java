@@ -11,6 +11,12 @@ import java.io.Serializable;
 import java.util.HashSet;
 import java.util.Set;
 
+/**
+ * This class is a base for all scenes of the game.
+ * It has own logic for listening the key press.
+ * The children of this class should implement own draw() method.
+ */
+
 public abstract class GeneralScene extends Scene implements GameConstants, Serializable {
     private StackPane root;
     protected GraphicsContext gc;
@@ -35,6 +41,7 @@ public abstract class GeneralScene extends Scene implements GameConstants, Seria
             activeKeys.remove(event.getCode());
             releasedKeys.add(event.getCode());
         });
+
         Canvas ui = new Canvas(GAME_WIDTH+100,GAME_HEIGHT+100);
         Canvas canvas = new Canvas(GAME_WIDTH, GAME_HEIGHT);
         root.getChildren().add(ui);

@@ -1,7 +1,6 @@
 package mz.scenes;
 
 import javafx.animation.AnimationTimer;
-import javafx.collections.ObservableList;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.input.KeyCode;
 import javafx.scene.paint.Color;
@@ -9,7 +8,6 @@ import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
 import mz.backgrounds.Level1;
 import mz.game.Game;
-import mz.periferals.Archive;
 import mz.periferals.GameConstants;
 import mz.periferals.SoundManager;
 import mz.sprites.*;
@@ -20,6 +18,11 @@ import org.json.simple.parser.ParseException;
 
 import java.io.*;
 import java.util.*;
+
+/**
+ * The SCENE for actual GAME.
+ * Game loop is here and collision detections handlers.
+ */
 
 public class GameScene extends GeneralScene implements GameConstants, Serializable {
     private Player player;
@@ -43,6 +46,10 @@ public class GameScene extends GeneralScene implements GameConstants, Serializab
 
     private double enemyTime = 0;
 
+    /**
+     * Constructor:
+     * - Initialise the Player, background, the lists for enemy bullets, player bullets, enemies and drops.
+     */
     public GameScene() {
         player = new Player();
         bgL1 = new Level1("Space_bg.png");
@@ -57,7 +64,6 @@ public class GameScene extends GeneralScene implements GameConstants, Serializab
         featuresDrop = new ArrayList<>();
 
         setFill(Color.BLACK);
-
     }
 
     public static long getTimeElapsed() {
@@ -100,6 +106,9 @@ public class GameScene extends GeneralScene implements GameConstants, Serializab
         this.pause = pause;
     }
 
+    /**
+     * Method for generating enemies on the battlefield
+     */
     public void generateEnemies(){
         enemyTime += 0.02;
         if (enemyTime > 2 && enemies.size() < 6) {
@@ -118,18 +127,21 @@ public class GameScene extends GeneralScene implements GameConstants, Serializab
     }
 
 
-
+    /**
+     * The game loop.
+     */
     @Override
     public void draw() {
         setStart(System.currentTimeMillis());
         activeKeys.clear();
+
+        //Game loop starts here
         new AnimationTimer() {
             @Override
             public void handle(long now) {
                 drawUI();
                 if((player.isAlive() || player.getLives() > 0 || player.getExplosion().isAlive()) && !isPause()){
                     bgL1.draw(gc);
-                    //showDevInfo();
                     player.draw(gc);
                     generateEnemies();
                     drawEnemies(gc);
@@ -155,6 +167,9 @@ public class GameScene extends GeneralScene implements GameConstants, Serializab
         }.start();
     }
 
+    /**
+     * Writes the record of played game to JSON file
+     */
     private void writeToArchive() {
         //gameplay time formatting
         long milliseconds = Math.abs(getTimeElapsed());
@@ -208,6 +223,9 @@ public class GameScene extends GeneralScene implements GameConstants, Serializab
         }
     }
 
+    /**
+     * Draws the information on the screen when the GAME is over.
+     */
     private void drawGameOver() {
         Font font = Font.font("Arial",FontWeight.NORMAL,24);
         gc.setFont(font);
@@ -223,6 +241,9 @@ public class GameScene extends GeneralScene implements GameConstants, Serializab
 
     }
 
+    /**
+     * Draws the information on the screen when the GAME is paused.
+     */
     private void drawGamePause() {
         Font font = Font.font("Arial",FontWeight.NORMAL,24);
         gc.setFont(font);
@@ -236,6 +257,10 @@ public class GameScene extends GeneralScene implements GameConstants, Serializab
 
     }
 
+    /**
+     * Drawing the informative UI for the player
+     * Includes: health points of the player, score, lives.
+     */
     private void drawUI() {
         gcUi.drawImage(UI,0,0);
         for (int i = 0; i < player.getLives(); i++) {
@@ -255,7 +280,9 @@ public class GameScene extends GeneralScene implements GameConstants, Serializab
     }
 
 
-
+    /**
+     * Draws the dropping feature from killed enemy
+     */
     private void drawFeaturesDrop() {
         for (FeatureDrop drop: featuresDrop){
             drop.draw(gc);
@@ -263,6 +290,9 @@ public class GameScene extends GeneralScene implements GameConstants, Serializab
         }
     }
 
+    /**
+     * All collisions detection method
+     */
     private void collisionDetect() {
         if(player.isAlive()) {
             for (Weapon weapon : playerWeapons) {
@@ -300,6 +330,12 @@ public class GameScene extends GeneralScene implements GameConstants, Serializab
 
     }
 
+    /**
+     * Helper method for colision detection.
+     * @param a - Object #1
+     * @param b - Object #2
+     * @return - return TRUE if collide and FALSE if not.
+     */
     private boolean isCollide(GeneralSprite a, GeneralSprite b){
         return  a.getX() >= b.getX() &&
                 a.getX() <= b.getX() + b.getSprite().getWidth() &&
@@ -307,6 +343,10 @@ public class GameScene extends GeneralScene implements GameConstants, Serializab
                 a.getY() <= b.getY() + b.getSprite().getHeight();
     }
 
+    /**
+     * Draws all bullets fired from player as well as from enemies
+     * @param gc - GraphicsContext from canvas.
+     */
     private void drawBullets(GraphicsContext gc) {
         for(Weapon weapon : playerWeapons){
             weapon.draw(gc);
@@ -326,7 +366,10 @@ public class GameScene extends GeneralScene implements GameConstants, Serializab
         }
     }
 
-
+    /**
+     *  Draws all enemies.
+     * @param gc - GraphicsContext from canvas.
+     */
     private void drawEnemies(GraphicsContext gc) {
         if (enemies.size() == 0) return;
         for(Enemy enemy: enemies){
@@ -340,21 +383,10 @@ public class GameScene extends GeneralScene implements GameConstants, Serializab
         }
     }
 
-    public void showDevInfo(){
-        Font font = Font.font("Arial", FontWeight.NORMAL,12);
-        gc.setFont(font);
-        gc.setFill(Color.WHITE);
-        String info = "Player x: " + player.getX() + ", y: " + player.getY();
-        gc.fillText(info, 0,12);
-        String bulletList = "Bullet list size:  " + playerWeapons.size();
-        gc.fillText(bulletList, 0,24);
-        gc.fillText("Feature list: " + featuresDrop.size(), 0,36);
-
-
-        gc.setLineWidth(1.0);
-        gc.strokeLine(0,GameScene.GAME_HEIGHT/2,GameScene.GAME_WIDTH,GameScene.GAME_HEIGHT/2);
-    }
-
+    /**
+     * Handles key presses on the scene.
+     * @param timer - game loop.
+     */
     public void keyPressHandler(AnimationTimer timer){
         if(activeKeys.contains(KeyCode.UP)){
             player.move(0,-5);
@@ -405,6 +437,9 @@ public class GameScene extends GeneralScene implements GameConstants, Serializab
         }
     }
 
+    /**
+     * Remover not alive objects.
+     */
     private void removeDead(){
         ListIterator<Enemy> aliveEnemies = enemies.listIterator();
         while (aliveEnemies.hasNext()){
@@ -435,6 +470,12 @@ public class GameScene extends GeneralScene implements GameConstants, Serializab
             }
         }
     }
+
+    /**
+     * Helper method. Random number generator.
+     * @param num
+     * @return
+     */
     private int getRandom(int num) {
         int rnd = new Random().nextInt(num);
         return rnd;

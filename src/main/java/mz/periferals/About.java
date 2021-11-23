@@ -8,6 +8,9 @@ import mz.game.Game;
 import java.net.URL;
 import java.util.ResourceBundle;
 
+/**
+ * Controller for "About scene" which is using FXML import
+ */
 public class About implements Initializable {
 
     @FXML

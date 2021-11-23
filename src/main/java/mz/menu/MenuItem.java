@@ -59,7 +59,7 @@ public class MenuItem extends Pane implements Serializable {
     }
 
     /**
-     *
+     * To fire an event for mouse click up on the menu item
      * @param action
      */
     public void setOnAction(Runnable action){

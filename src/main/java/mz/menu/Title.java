@@ -9,9 +9,17 @@ import javafx.scene.text.Text;
 
 import java.io.Serializable;
 
+/**
+ * Class for the any Title for the scene
+ */
+
 public class Title extends Pane implements Serializable {
     private Text text;
 
+    /**
+     * Main constructor.
+     * @param name - title name
+     */
     public Title(String name){
         String spread = "";
         for(char c: name.toCharArray()){
@@ -26,6 +34,15 @@ public class Title extends Pane implements Serializable {
         getChildren().addAll(text);
     }
 
+    /**
+     * To get width of the title
+     * @return
+     */
     public double getTitleWidth(){ return text.getLayoutBounds().getWidth();}
+
+    /**
+     * To get heught of the title
+     * @return
+     */
     public double getTitleHeight(){ return text.getLayoutBounds().getHeight();}
 }

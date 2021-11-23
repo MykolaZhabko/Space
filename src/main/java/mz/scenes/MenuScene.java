@@ -20,6 +20,9 @@ import java.io.Serializable;
 import java.util.Arrays;
 import java.util.List;
 
+/**
+ * Scene for MAIN MENU
+ */
 public class MenuScene extends GeneralScene implements Serializable {
     private Line line;
     private VBox menuBox = new VBox(-5);
@@ -44,21 +47,24 @@ public class MenuScene extends GeneralScene implements Serializable {
 
     }
 
+    /**
+     * Draws the MENU with background, title and menu items.
+     * Animation is performed too.
+     */
     @Override
     public void draw() {
         addBackground();
         addTitle();
         addMenu(UI_WIDTH / 2 - 200, UI_HEIGHT / 4 + 100);
-
         double lineX = 0;
         double lineY = 0;
-
         addLine(lineX, lineY);
-
         startAnimation();
-
     }
 
+    /**
+     * Adds the background to the scene.
+     */
     private void addBackground() {
         ImageView imageView = new ImageView(new Image("UIBACK.png"));
         imageView.setFitWidth(UI_WIDTH);
@@ -66,6 +72,9 @@ public class MenuScene extends GeneralScene implements Serializable {
         getGeneralRoot().getChildren().add(imageView);
     }
 
+    /**
+     * Adds the title to the scene
+     */
     private void addTitle() {
         Title title = new Title("VAMK SPACE");
         title.setTranslateX(UI_WIDTH / 2 - title.getTitleWidth() / 2);
@@ -73,6 +82,11 @@ public class MenuScene extends GeneralScene implements Serializable {
         getGeneralRoot().getChildren().add(title);
     }
 
+    /**
+     * Adds the line, which will be animated
+     * @param x - x-axis coordinates on the scene
+     * @param y - y-axis coordinates on the scene
+     */
     private void addLine(double x, double y) {
         line = new Line(x, y, x, y + 170);
         line.setStrokeWidth(3);
@@ -85,6 +99,9 @@ public class MenuScene extends GeneralScene implements Serializable {
         getGeneralRoot().getChildren().add(line);
     }
 
+    /**
+     * Animation method
+     */
     private void startAnimation() {
         ScaleTransition st = new ScaleTransition(Duration.seconds(1), line);
         st.setToY(1);
@@ -101,6 +118,11 @@ public class MenuScene extends GeneralScene implements Serializable {
         st.play();
     }
 
+    /**
+     * Adds the menu to the scene. The menu also animated.
+     * @param x - x-axis coordinates on the scene
+     * @param y - y-axis coordinates on the scene
+     */
     private void addMenu(double x, double y) {
         menuBox.setTranslateX(x);
         menuBox.setTranslateY(y);

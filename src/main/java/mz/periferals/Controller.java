@@ -20,6 +20,11 @@ import java.io.IOException;
 import java.net.URL;
 import java.util.ResourceBundle;
 
+/**
+ * This class is a controller for TableView imported from FXML "accets/table.fxml"
+ * The table shows the information about played game. Date, score, and time in seconds.
+ * The Archive objects are used to fill up the table content.
+ */
 public class Controller implements Initializable {
 
     @FXML
@@ -37,6 +42,11 @@ public class Controller implements Initializable {
     @FXML
     private TableView<Archive> table_info;
 
+    /**
+     * Initialize the Table and attaches to the button an mouseClick event handler.
+     * @param location
+     * @param resources
+     */
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         initTable();
@@ -45,11 +55,13 @@ public class Controller implements Initializable {
         });
     }
 
+    /**
+     * Initialize the table content with Archive object instances.
+     * So the content of table is automatically filled using Observable list.
+     * Here we read the file located at ./spaceGame/arch.json and parse it into array of JSON objects
+     * from which the Archive object generated and added to Observable list for TableView.
+     */
     private void initTable() {
-        initCols();
-    }
-
-    private void initCols() {
         col_date.setCellValueFactory(new PropertyValueFactory<Archive, String>("DATE"));
         col_score.setCellValueFactory(new PropertyValueFactory<Archive, String>("SCORE"));
         col_time.setCellValueFactory(new PropertyValueFactory<Archive, String>("TIME"));
