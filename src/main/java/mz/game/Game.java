@@ -51,6 +51,12 @@ public class Game extends Application implements GameConstants {
         }
     }
 
+    public static void setScene(int numScene, boolean load) {
+        if (numScene != GAME_SCENE) setScene(numScene);
+        GeneralScene scene = new GameScene(true);
+        root.setScene(scene);
+        scene.draw();
+    }
     /**
      * The method will perform exit the game
      */

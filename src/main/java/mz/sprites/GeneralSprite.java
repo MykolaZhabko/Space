@@ -3,7 +3,10 @@ package mz.sprites;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.image.Image;
 
-public abstract class GeneralSprite{
+import java.io.Serializable;
+
+public abstract class GeneralSprite implements Serializable {
+    private static final long serialVersionUID = 1L;
     private int x;
     private int y;
     private double hp;

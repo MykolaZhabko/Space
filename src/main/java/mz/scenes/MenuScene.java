@@ -32,6 +32,9 @@ public class MenuScene extends GeneralScene implements Serializable, GameConstan
                 Game.setScene(GAME_SCENE);
 
             }),
+            new Pair<String, Runnable>("LOAD SAVED GAME", () -> {
+                Game.setScene(GAME_SCENE, true);
+            }),
             new Pair<String, Runnable>("ARCHIVES", () -> {
                 Game.setScene(ARCHIVE_SCENE);
             }),
@@ -89,11 +92,11 @@ public class MenuScene extends GeneralScene implements Serializable, GameConstan
      * @param y - y-axis coordinates on the scene
      */
     private void addLine(double x, double y) {
-        line = new Line(x, y, x, y + 170);
+        line = new Line(x, y, x, y + 200);
         line.setStrokeWidth(3);
         line.setStroke(Color.color(1, 1, 1, 0.75));
         line.setEffect(new DropShadow(5, Color.BLACK));
-        line.setTranslateY(-45);
+        line.setTranslateY(-25);
         line.setTranslateX(-210);
         line.setScaleY(0);
 

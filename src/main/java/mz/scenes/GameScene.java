@@ -66,6 +66,30 @@ public class GameScene extends GeneralScene implements GameConstants {
         setFill(Color.BLACK);
     }
 
+    /**
+     * Constructor for loading the game
+     * @param load - any boolean value will load the game
+     */
+    public GameScene(boolean load){
+        player = new Player();
+        int[] values = readSerializedPlayer();
+        player.setScore(values[0]);
+        player.setX(values[1]);
+        player.setY(values[2]);
+        bgL1 = new Level1("Space_bg.png");
+
+        soundManager = new SoundManager(2);
+
+        setGameOver(false);
+        setPause(false);
+        enemies = new ArrayList<>();
+        playerWeapons = new ArrayList<>();
+        enemyWeapons = new ArrayList<>();
+        featuresDrop = new ArrayList<>();
+
+        setFill(Color.BLACK);
+    }
+
     public static long getTimeElapsed() {
         return timeElapsed;
     }
@@ -148,11 +172,9 @@ public class GameScene extends GeneralScene implements GameConstants {
                     drawBullets(gc);
                     drawFeaturesDrop();
                     removeDead();
-                    keyPressHandler(this);
                     collisionDetect();
                 }else if (isPause()){
                     drawGamePause();
-                    keyPressHandler(this);
                 } else {
                     if(!isGameOver() && !isPause()) {
                         setGameOver(true);
@@ -161,8 +183,9 @@ public class GameScene extends GeneralScene implements GameConstants {
                         writeToArchive();
                     }
                     drawGameOver();
-                    keyPressHandler(this);
+
                 }
+                keyPressHandler(this);
             }
         }.start();
     }
@@ -234,10 +257,11 @@ public class GameScene extends GeneralScene implements GameConstants {
         gc.setFill(Color.WHITE);
         gc.fillText("TIME: " + (getTimeElapsed() * (-1) / 1000) + " seconds",GAME_WIDTH/2 -240,GAME_HEIGHT/2 + 24);
         gc.fillText("SCORE: " + player.getScore(),GAME_WIDTH/2 -240,GAME_HEIGHT/2 + 48);
-        font = Font.font("Arial",FontWeight.NORMAL,12);
+        font = Font.font("Arial",FontWeight.NORMAL,24);
         gc.setFont(font);
         gc.setFill(Color.LAVENDERBLUSH);
-        gc.fillText("To restart the game press SPACE.... ",GAME_WIDTH/2 -240,GAME_HEIGHT/2 + 96);
+        gc.fillText("To restart the game press - R ",GAME_WIDTH/2 -240,GAME_HEIGHT/2 + 96);
+        gc.fillText("To EXIT the game press - ESC ",GAME_WIDTH/2 -240,GAME_HEIGHT/2 + 120);
 
     }
 
@@ -253,7 +277,8 @@ public class GameScene extends GeneralScene implements GameConstants {
         font = Font.font("Arial",FontWeight.NORMAL,24);
         gc.setFont(font);
         gc.setFill(Color.LAVENDERBLUSH);
-        gc.fillText("DO YOU WANT TO EXIT?  Y / N  ",GAME_WIDTH/2 -240,GAME_HEIGHT/2 + 96);
+        gc.fillText("DO YOU WANT TO EXIT?  Y(y) / N(n)  ",GAME_WIDTH/2 -240,GAME_HEIGHT/2 + 96);
+        gc.fillText("To SAVE GAME PRESS - S",GAME_WIDTH/2 -240,GAME_HEIGHT/2 + 120);
 
     }
 
@@ -417,7 +442,6 @@ public class GameScene extends GeneralScene implements GameConstants {
         if (activeKeys.contains(KeyCode.ESCAPE)){
             if(!isGameOver() && !isPause()) {
                 setPause(true);
-                serializePlayer();
             } else if(isGameOver()){
                 timer.stop();
                 soundManager.shutdown();
@@ -434,13 +458,18 @@ public class GameScene extends GeneralScene implements GameConstants {
         if (activeKeys.contains(KeyCode.N)){
             if (isPause()){
                 setPause(false);
-                readSerializedPlayer();
+            }
+        }
+        if (activeKeys.contains(KeyCode.S)){
+            if (isPause()){
+                serializePlayer();
+                setPause(false);
             }
         }
     }
 
     /**
-     * Remover not alive objects.
+     * Remove not alive objects.
      */
     private void removeDead(){
         ListIterator<Enemy> aliveEnemies = enemies.listIterator();
@@ -483,6 +512,10 @@ public class GameScene extends GeneralScene implements GameConstants {
         return rnd;
     }
 
+    /**
+     * Method to serialize the Player object.
+     * Currently only score is needed for loading the game
+     */
     private void serializePlayer(){
         try {
             FileOutputStream fos = new FileOutputStream("spaceGame/player.txt");
@@ -498,7 +531,11 @@ public class GameScene extends GeneralScene implements GameConstants {
 
     }
 
-    private void readSerializedPlayer(){
+    /**
+     * Method to read serialized object and use some of the properties for Player
+     */
+    private int[] readSerializedPlayer(){
+        int[] values;
         try {
             FileInputStream fis = new FileInputStream("spaceGame/player.txt");
             ObjectInputStream ois = new ObjectInputStream(fis);
@@ -506,7 +543,10 @@ public class GameScene extends GeneralScene implements GameConstants {
             Player player = (Player) ois.readObject();
             ois.close();
 
-            System.out.println("Loaded player with score: " + player.getScore());
+            System.out.println("Loaded player:");
+            System.out.println(player);
+            values = new int[]{player.getScore(),player.getX(),player.getY()};
+            return values;
         } catch (FileNotFoundException e){
             e.printStackTrace();
         } catch (IOException e){
@@ -514,5 +554,7 @@ public class GameScene extends GeneralScene implements GameConstants {
         } catch (ClassNotFoundException e) {
             e.printStackTrace();
         }
+        values = new int[]{0, (int) (GAME_WIDTH/2 - player.getSprite().getWidth()/2), (int) (GAME_HEIGHT-this.player.getSprite().getHeight())};
+        return values;
     }
 }

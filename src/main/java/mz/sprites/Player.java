@@ -136,4 +136,18 @@ public class Player extends GeneralSprite implements GameConstants, Serializable
                 break;
         }
     }
+
+    @Override
+    public String toString() {
+        return "Player{" +
+                "maxX=" + maxX +
+                ", maxY=" + maxY +
+                ", score=" + score +
+                ", lives=" + lives +
+                ", explosion=" + explosion +
+                ", initialHP=" + initialHP +
+                ", ammoType=" + ammoType +
+                ", timeCount=" + timeCount +
+                '}';
+    }
 }
