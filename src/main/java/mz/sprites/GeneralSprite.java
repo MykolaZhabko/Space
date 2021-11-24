@@ -8,7 +8,7 @@ public abstract class GeneralSprite{
     private int y;
     private double hp;
     private boolean isAlive = true;
-    private Image sprite;
+    transient private Image sprite;
 
 
     public int getX() {

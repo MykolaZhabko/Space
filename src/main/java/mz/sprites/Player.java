@@ -10,11 +10,12 @@ import static mz.scenes.GameScene.playerWeapons;
 import static mz.scenes.GameScene.soundManager;
 
 public class Player extends GeneralSprite implements GameConstants, Serializable {
+    private static final long serialVersionUID = 1L;
     private final int maxX;
     private final int maxY;
     private int score;
     private int lives;
-    private final Explosion explosion;
+    transient private final Explosion explosion;
     private final int initialHP;
     private int ammoType;
     private double timeCount;

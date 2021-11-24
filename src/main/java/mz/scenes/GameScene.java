@@ -24,7 +24,7 @@ import java.util.*;
  * Game loop is here and collision detections handlers.
  */
 
-public class GameScene extends GeneralScene implements GameConstants, Serializable {
+public class GameScene extends GeneralScene implements GameConstants {
     private Player player;
     private final Level1 bgL1;
     private boolean gameOver;
@@ -417,6 +417,7 @@ public class GameScene extends GeneralScene implements GameConstants, Serializab
         if (activeKeys.contains(KeyCode.ESCAPE)){
             if(!isGameOver() && !isPause()) {
                 setPause(true);
+                serializePlayer();
             } else if(isGameOver()){
                 timer.stop();
                 soundManager.shutdown();
@@ -433,6 +434,7 @@ public class GameScene extends GeneralScene implements GameConstants, Serializab
         if (activeKeys.contains(KeyCode.N)){
             if (isPause()){
                 setPause(false);
+                readSerializedPlayer();
             }
         }
     }
@@ -479,5 +481,38 @@ public class GameScene extends GeneralScene implements GameConstants, Serializab
     private int getRandom(int num) {
         int rnd = new Random().nextInt(num);
         return rnd;
+    }
+
+    private void serializePlayer(){
+        try {
+            FileOutputStream fos = new FileOutputStream("spaceGame/player.txt");
+            ObjectOutputStream oos = new ObjectOutputStream(fos);
+            oos.writeObject(player);
+            oos.flush();
+            oos.close();
+        } catch (FileNotFoundException e){
+            e.printStackTrace();
+        } catch (IOException e){
+            e.printStackTrace();
+        }
+
+    }
+
+    private void readSerializedPlayer(){
+        try {
+            FileInputStream fis = new FileInputStream("spaceGame/player.txt");
+            ObjectInputStream ois = new ObjectInputStream(fis);
+
+            Player player = (Player) ois.readObject();
+            ois.close();
+
+            System.out.println("Loaded player with score: " + player.getScore());
+        } catch (FileNotFoundException e){
+            e.printStackTrace();
+        } catch (IOException e){
+            e.printStackTrace();
+        } catch (ClassNotFoundException e) {
+            e.printStackTrace();
+        }
     }
 }

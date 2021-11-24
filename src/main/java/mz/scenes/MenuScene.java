@@ -15,6 +15,7 @@ import javafx.util.Pair;
 import mz.game.Game;
 import mz.menu.MenuItem;
 import mz.menu.Title;
+import mz.periferals.GameConstants;
 
 import java.io.Serializable;
 import java.util.Arrays;
@@ -23,16 +24,16 @@ import java.util.List;
 /**
  * Scene for MAIN MENU
  */
-public class MenuScene extends GeneralScene implements Serializable {
+public class MenuScene extends GeneralScene implements Serializable, GameConstants {
     private Line line;
     private VBox menuBox = new VBox(-5);
     private List<Pair<String, Runnable>> menuData = Arrays.asList(
             new Pair<String, Runnable>("START", () -> {
-                Game.setScene(0);
+                Game.setScene(GAME_SCENE);
 
             }),
             new Pair<String, Runnable>("ARCHIVES", () -> {
-                Game.setScene(2);
+                Game.setScene(ARCHIVE_SCENE);
             }),
             new Pair<String, Runnable>("ABOUT", () -> {
                 Game.setScene(3);

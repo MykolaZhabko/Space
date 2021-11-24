@@ -2,11 +2,13 @@ package mz.periferals;
 
 import javafx.scene.image.Image;
 
+import java.io.Serializable;
+
 /**
  * This interface is used as a constants container for whole game.
  */
 
-public interface GameConstants {
+public interface GameConstants{
     int GAME_WIDTH = 600;
     int GAME_HEIGHT = 800;
     int UI_WIDTH = 700;
