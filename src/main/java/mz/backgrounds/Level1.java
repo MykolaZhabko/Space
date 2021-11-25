@@ -1,7 +1,8 @@
 package mz.backgrounds;
 
-import java.util.ArrayList;
-
+/**
+ * Future implementation require here
+ */
 public class Level1 extends GeneralBackground{
 
     public Level1(String url) {

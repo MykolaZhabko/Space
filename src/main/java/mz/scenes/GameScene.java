@@ -261,7 +261,7 @@ public class GameScene extends GeneralScene implements GameConstants {
         gc.setFont(font);
         gc.setFill(Color.LAVENDERBLUSH);
         gc.fillText("To restart the game press - R ",GAME_WIDTH/2 -240,GAME_HEIGHT/2 + 96);
-        gc.fillText("To EXIT the game press - ESC ",GAME_WIDTH/2 -240,GAME_HEIGHT/2 + 120);
+        gc.fillText("To exit the game press - ESC ",GAME_WIDTH/2 -240,GAME_HEIGHT/2 + 120);
 
     }
 
@@ -277,8 +277,8 @@ public class GameScene extends GeneralScene implements GameConstants {
         font = Font.font("Arial",FontWeight.NORMAL,24);
         gc.setFont(font);
         gc.setFill(Color.LAVENDERBLUSH);
-        gc.fillText("DO YOU WANT TO EXIT?  Y(y) / N(n)  ",GAME_WIDTH/2 -240,GAME_HEIGHT/2 + 96);
-        gc.fillText("To SAVE GAME PRESS - S",GAME_WIDTH/2 -240,GAME_HEIGHT/2 + 120);
+        gc.fillText("DO YOU WANT TO EXIT?  Y / N  ",GAME_WIDTH/2 -240,GAME_HEIGHT/2 + 96);
+        gc.fillText("TO SAVE GAME PRESS - S",GAME_WIDTH/2 -240,GAME_HEIGHT/2 + 120);
 
     }
 

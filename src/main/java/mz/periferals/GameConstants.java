@@ -20,8 +20,8 @@ public interface GameConstants{
     int ABOUT_SCENE = 3;
 
     Image UI = new Image("UIBACK.png",700,900,false,true);
-    Image explosion1 = new Image("Explosions/explosion 1.png");
-    Image explosion3 = new Image("Explosions/explosion 3.png");
+    Image explosion1 = new Image("Explosions/explosion 3.png");
+    Image explosion3 = new Image("Explosions/explosion 2.png");
     Image explosion4 = new Image("Explosions/explosion 4.png");
     Image enemy = new Image("Enemies/Spaceship-Drakir1.png",32, 29, true, true);
     Image enemy2 = new Image("Enemies/Spaceship-Drakir2.png",48,48,true,true);
